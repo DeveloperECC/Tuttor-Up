@@ -1,43 +1,77 @@
 <?php
-// publico/index.php - Router Principal
+// TUTORUP/publico/index.php
+session_start(); // Iniciar sesión si se va a usar
 
-// Configuración básica para mostrar errores (útil durante el desarrollo)
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// Cargar configuración
+require_once dirname(__DIR__) . '/config/config.php';
 
-// Definir rutas base
-// Asume que la carpeta 'publico' es la raíz de tu servidor web
-define('ROOT_PATH', dirname(__DIR__)); // Ruta a la raíz del proyecto (la carpeta padre de publico)
+// Lógica de Enrutamiento Simple
+// Obtener la ruta de la URL después de la BASE_URL.
+// Ej: Si BASE_URL es http://localhost/TUTORUP y la URL es http://localhost/TUTORUP/materias/calculo
+// $route será /materias/calculo
+$base_url_path = parse_url(BASE_URL, PHP_URL_PATH);
+$request_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-// Construir la URL base para los enlaces (ej: http://localhost/tuttor-up)
-// str_replace('/publico/index.php', '', $_SERVER['SCRIPT_NAME']) elimina '/publico/index.php' de la ruta del script
-$base_url = 'http://' . $_SERVER['HTTP_HOST'] . str_replace('/publico/index.php', '', $_SERVER['SCRIPT_NAME']);
-define('BASE_URL', $base_url);
-
-// Definir la URL para los archivos estáticos (CSS, JS, imágenes)
-define('ASSETS_URL', BASE_URL . '/publico');
-
-
-// Incluir el controlador que maneja las acciones relacionadas con las materias
-// Asegúrate de que la ruta sea correcta desde ROOT_PATH
-require_once ROOT_PATH . '/controladores/ControladorMaterias.php';
-
-// Obtener la acción solicitada desde el parámetro 'accion' en la URL
-// Si no se especifica 'accion', el valor por defecto es 'mostrar'
-$accion = $_GET['accion'] ?? 'mostrar';
-
-// Crear una instancia del controlador de materias
-$controlador = new ControladorMaterias();
-
-// Verificar si el método correspondiente a la acción existe en el controlador
-if (method_exists($controlador, $accion)) {
-    // Si existe, llamar al método del controlador
-    $controlador->$accion();
+if ($base_url_path && strpos($request_uri, $base_url_path) === 0) {
+    $route = substr($request_uri, strlen($base_url_path));
 } else {
-    // Si la acción no existe, ejecutar la acción por defecto (mostrar la página principal)
-    // Esto puede servir como una página de error 404 simple o redirigir al inicio
-    echo "Error: Acción no encontrada.";
-    // O llamar a la acción por defecto:
-    // $controlador->mostrar();
+    $route = $request_uri; // Caso raíz del dominio
 }
+$route = ltrim($route, '/');
+
+// Valores por defecto
+$controladorNombre = 'ControladorInicio';
+$metodoNombre = 'index';
+$parametros = [];
+
+if (!empty($route)) {
+    $partesRuta = explode('/', filter_var(rtrim($route, '/'), FILTER_SANITIZE_URL));
+
+    // Controlador
+    if (!empty($partesRuta[0])) {
+        $controladorNombre = 'Controlador' . ucfirst(strtolower($partesRuta[0]));
+    }
+
+    // Método
+    if (isset($partesRuta[1]) && !empty($partesRuta[1])) {
+        $metodoNombre = strtolower($partesRuta[1]);
+    }
+
+    // Parámetros
+    if (count($partesRuta) > 2) {
+        $parametros = array_slice($partesRuta, 2);
+    }
+}
+
+// Cargar archivo del controlador
+$archivoControlador = ROOT_PATH . '/app/controladores/' . $controladorNombre . '.php';
+
+if (file_exists($archivoControlador)) {
+    require_once $archivoControlador;
+    if (class_exists($controladorNombre)) {
+        $controlador = new $controladorNombre();
+        if (method_exists($controlador, $metodoNombre)) {
+            // Llamar al método con parámetros
+            call_user_func_array([$controlador, $metodoNombre], $parametros);
+        } else {
+            // Método no encontrado
+            header("HTTP/1.0 404 Not Found");
+            echo "Error 404: Método '$metodoNombre' no encontrado en '$controladorNombre'.";
+        }
+    } else {
+        // Clase del controlador no encontrada
+        header("HTTP/1.0 404 Not Found");
+        echo "Error 404: Controlador '$controladorNombre' (clase) no encontrado.";
+    }
+} else {
+    // Archivo del controlador no encontrado. Si es ControladorInicio, intentamos cargar el index por defecto.
+    if ($controladorNombre === 'ControladorInicio' && file_exists(ROOT_PATH . '/app/controladores/ControladorInicio.php')) {
+        require_once ROOT_PATH . '/app/controladores/ControladorInicio.php';
+        $controlador = new ControladorInicio();
+        $controlador->index();
+    } else {
+        header("HTTP/1.0 404 Not Found");
+        echo "Error 404: Controlador '$controladorNombre' (archivo) no encontrado. Ruta solicitada: '$route'";
+    }
+}
+?>

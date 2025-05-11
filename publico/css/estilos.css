@@ -1,9 +1,17 @@
 /* publico/css/estilos.css */
 @import 'variables.css';
 
-/* --- Estilos Base y Fondo --- (Sin cambios significativos, usando variables) */
-html { font-size: 100%; box-sizing: border-box; scroll-behavior: smooth; }
-*, *::before, *::after { box-sizing: inherit; }
+/* --- Estilos Base y Fondo --- */
+html {
+  font-size: 100%; /* Asumiendo 1rem = 16px */
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
@@ -12,7 +20,7 @@ body {
   display: flex;
   min-height: 100vh;
   overflow-x: hidden;
-  background-image: url('../imagenes/fondo.png');
+  background-image: url('../imagenes/fondo.png'); /* Ruta relativa a la carpeta css */
   background-size: contain;
   background-position: right center;
   background-repeat: no-repeat;
@@ -20,75 +28,104 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 body::before {
-  content: ""; position: fixed; top: 0; left: 0;
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
   width: 100%; height: 100%;
-  background-color: rgba(26, 29, 33, 0.6);
+  background-color: rgba(26, 29, 33, 0.75); /* Overlay más oscuro */
   z-index: -1;
 }
 
-/* --- AJUSTES AL MENÚ LATERAL --- */
+/* --- MENÚ LATERAL --- */
 .menu-lateral {
-  position: fixed; top: 0;
-  left: calc(-1 * var(--ancho-lateral) + var(--asa-lateral));
-  width: var(--ancho-lateral);
+  position: fixed;
+  top: 0;
+  left: calc(-1 * var(--ancho-lateral, 14.375rem) + var(--asa-lateral, 4.0625rem));
+  width: var(--ancho-lateral, 14.375rem);
   height: 100vh;
-  background: var(--fondo-lateral);
-  transition: left 0.35s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Transición con "rebote" */
+  background: var(--fondo-lateral, #252930);
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Transición suave */
   z-index: 1000;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 1rem; /* Reducido padding superior */
-  overflow-y: auto;
-  overflow-x: hidden;
+  padding-top: 1rem;
+  overflow-x: hidden; /* Prevenir desbordamiento horizontal del texto */
+  overflow-y: hidden; /* Ocultar scrollbar por defecto */
+  box-shadow: 0.125rem 0 0.375rem rgba(0,0,0,0.2);
 }
 
 .menu-lateral:hover,
 .menu-lateral.menu-abierto-js {
   left: 0;
+  overflow-y: auto; /* Mostrar scrollbar solo cuando está abierto y el contenido es largo */
+}
+
+/* Extensor de área de hover para estabilidad */
+.menu-lateral::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -0.625rem; /* 10px */
+  width: 0.625rem;
+  height: 100%;
+  /* background: rgba(255,0,0,0.1); /* Descomentar para depurar área de hover */
 }
 
 .menu-lateral__logo-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 1.5rem; /* Aumentado espacio debajo del logo */
-  padding: 0 0.5rem;
+  margin-bottom: 1.5rem;
+  padding: 0 0.5rem; /* Padding para el texto del logo */
+  width: 100%; /* Ocupa el ancho del menú para centrar bien el texto */
 }
 
 .menu-lateral__logo-img {
-  width: 3.75rem; /* 60px - Logo más grande */
+  width: 2.8125rem; /* 45px - Ajustado */
   height: auto;
   margin-bottom: 0.5rem;
+  transition: width 0.3s ease-in-out;
+}
+.menu-lateral:hover .menu-lateral__logo-img,
+.menu-lateral.menu-abierto-js .menu-lateral__logo-img {
+  width: 3.4375rem; /* 55px */
 }
 
 .menu-lateral__logo-text {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.25rem; /* 20px - Texto del logo más grande */
+  font-size: 1.1875rem; /* 19px */
   font-weight: bold;
   color: var(--color-tuttor-up-green);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   opacity: 0;
   max-height: 0;
+  transform: translateY(-0.625rem);
   overflow: hidden;
-  transition: opacity 0.3s 0.1s ease, max-height 0.3s 0.1s ease; /* Pequeño retraso para la aparición */
+  transition: opacity 0.2s 0.1s ease, max-height 0.2s 0.1s ease, transform 0.2s 0.1s ease;
 }
 .menu-lateral:hover .menu-lateral__logo-text,
 .menu-lateral.menu-abierto-js .menu-lateral__logo-text {
   opacity: 1;
   max-height: 5rem;
+  transform: translateY(0);
 }
 
 .menu-lateral__lista {
-  list-style: none; width: 100%; display: flex; flex-direction: column;
-  align-items: stretch; /* Estirar items para que ocupen todo el ancho */
-  padding: 0; margin: 0;
+  list-style: none;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; /* Items ocupan todo el ancho */
+  padding: 0;
+  margin: 0;
 }
 
 .menu-lateral__item {
-  margin: 0.375rem 0; /* 6px - Espacio entre items reducido */
+  margin: 0.125rem 0; /* Espacio muy pequeño entre items */
   width: 100%;
 }
 
@@ -97,242 +134,353 @@ body::before {
   align-items: center;
   text-decoration: none;
   outline: none;
-  padding: 0.75rem 0; /* 12px vertical, padding lateral manejado por icono y texto */
+  padding: 0.75rem 0; /* 12px vertical */
   color: var(--texto-atenuado);
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color 0.15s ease, color 0.15s ease;
   overflow: hidden;
   white-space: nowrap;
-  position: relative; /* Para posicionar el icono correctamente */
+  position: relative;
 }
 
 .menu-lateral__icono {
-  font-size: var(--tamano-icono-menu-rem); /* Usa variable CSS */
+  font-size: var(--tamano-icono-menu-rem, 1.375rem);
   color: inherit;
-  opacity: 0.7;
-  transition: transform 0.3s, opacity 0.3s;
-  /* Centrar el icono en el espacio del "asa" */
-  width: var(--asa-lateral);
-  min-width: var(--asa-lateral); /* Asegura que el espacio se mantenga */
+  opacity: 0.75;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  width: var(--asa-lateral, 4.0625rem);
+  min-width: var(--asa-lateral, 4.0625rem);
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-shrink: 0; /* No se encoge */
+  flex-shrink: 0;
 }
 
 .menu-lateral__texto {
   margin-left: 0.75rem; /* 12px */
-  font-size: var(--tamano-texto-menu-rem); /* Usa variable CSS */
+  font-size: var(--tamano-texto-menu-rem, 0.9375rem);
   opacity: 0;
   max-width: 0;
+  transform: translateX(-0.625rem);
   overflow: hidden;
-  transition: opacity 0.2s 0.15s ease, max-width 0.2s 0.15s ease, margin-left 0.2s 0.15s ease;
-  /* La transición de margin-left también, si el icono se mueve */
+  transition: opacity 0.15s 0.05s ease-out, max-width 0.15s 0.05s ease-out, transform 0.15s 0.05s ease-out, margin-left 0.15s 0.05s ease-out;
 }
 .menu-lateral:hover .menu-lateral__texto,
 .menu-lateral.menu-abierto-js .menu-lateral__texto {
   opacity: 1;
-  max-width: calc(var(--ancho-lateral) - var(--asa-lateral) - 1rem); /* Espacio restante */
+  max-width: calc(var(--ancho-lateral) - var(--asa-lateral) - 1rem); /* Ajusta según padding */
+  transform: translateX(0);
 }
 
 .menu-lateral__enlace--activo,
 .menu-lateral__enlace:hover {
-  background-color: rgba(var(--color-tuttor-up-green-rgb, 118, 240, 214), 0.15); /* Fondo con opacidad del verde */
-  color: var(--texto-claro);
+  background-color: rgba(118, 240, 214, 0.12); /* Verde con más opacidad */
+  color: var(--color-tuttor-up-green);
 }
-/* Para usar --color-tuttor-up-green-rgb, defínelo en variables.css si no existe:
-   --color-tuttor-up-green-rgb: 118, 240, 214; */
-
 .menu-lateral__enlace--activo .menu-lateral__icono,
 .menu-lateral__enlace:hover .menu-lateral__icono {
-  transform: scale(1.15); /* Escala ligeramente menor */
   opacity: 1;
+  transform: scale(1.1);
 }
 
-/* Submenús (sin cambios significativos de tu CSS original, solo unidades rem) */
-.menu-lateral__item.has-submenu .menu-lateral__enlace { justify-content: flex-start; /* Para que la flecha no se vaya al final */ }
 .submenu-flecha {
-    font-size: 0.875rem; /* 14px */
-    transition: transform 0.3s ease;
-    margin-left: auto; /* Empuja la flecha a la derecha del texto */
-    padding-right: 1rem; /* Espacio para la flecha */
-    opacity: 0; /* Oculta flecha cuando el menú está colapsado */
+  font-size: 0.8125rem; /* 13px */
+  transition: transform 0.3s ease, opacity 0.2s 0.1s ease-out;
+  margin-left: auto;
+  padding-right: 1.25rem; /* 20px, para que no esté pegada al borde */
+  opacity: 0;
+  transform: translateX(-0.625rem);
 }
 .menu-lateral:hover .submenu-flecha,
 .menu-lateral.menu-abierto-js .submenu-flecha {
-    opacity: 0.7;
+  opacity: 0.6;
+  transform: translateX(0);
 }
-.menu-lateral__item.has-submenu.submenu-abierto .submenu-flecha { transform: rotate(180deg); opacity: 1;}
+.menu-lateral__enlace:hover .submenu-flecha,
+.menu-lateral__item.has-submenu.submenu-abierto .submenu-flecha {
+    opacity: 1;
+}
+.menu-lateral__item.has-submenu.submenu-abierto .submenu-flecha {
+  transform: rotate(180deg) translateX(0);
+}
+
 .menu-lateral__submenu {
-    list-style: none;
-    padding-left: var(--asa-lateral); /* Submenú indentado */
-    max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out;
-    background-color: rgba(0,0,0,0.2); /* Fondo ligeramente más oscuro para submenú */
+  list-style: none;
+  padding-left: var(--asa-lateral); /* Indentado al nivel de los iconos */
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out, background-color 0.2s ease;
+  background-color: rgba(0,0,0,0.15);
 }
-.menu-lateral__item.has-submenu.submenu-abierto .menu-lateral__submenu { max-height: 25rem; /* Aumentado */ }
+.menu-lateral__item.has-submenu.submenu-abierto .menu-lateral__submenu {
+  max-height: 30rem; /* Suficiente para varios items */
+  background-color: rgba(0,0,0,0.25); /* Ligeramente más oscuro cuando abierto */
+}
 .menu-lateral__submenu-enlace {
-    display: flex; align-items: center;
-    padding: 0.625rem 1rem; /* 10px 16px */
-    font-size: 0.875rem; /* 14px */
-    color: var(--texto-atenuado);
+  display: flex; align-items: center;
+  padding: 0.5rem 0.75rem 0.5rem 0; /* Ajusta padding, el izquierdo ya lo da el ul */
+  font-size: 0.875rem; /* 14px */
+  color: var(--texto-atenuado);
 }
-.menu-lateral__submenu-enlace:hover { color: var(--texto-claro); background-color: rgba(var(--color-tuttor-up-green-rgb, 118, 240, 214),0.1); }
-.menu-lateral__submenu-icono { margin-right: 0.625rem; /* 10px */ font-size: 0.875rem; /* 14px */ }
+.menu-lateral__submenu-enlace:hover {
+  color: var(--texto-claro);
+  background-color: rgba(118, 240, 214,0.08);
+}
+.menu-lateral__submenu-icono {
+  margin-right: 0.5rem; /* 8px */
+  font-size: 0.8125rem; /* 13px */
+  width: 1.25em; /* Para alinear con iconos principales */
+  text-align: center;
+}
 
 
-/* --- Contenido Principal (sin cambios de tu CSS original) --- */
+/* --- Contenido Principal --- */
 .contenido-principal {
   flex-grow: 1; padding: 1.25rem; position: relative; z-index: 1; overflow-y: auto;
   margin-left: var(--asa-lateral);
-  transition: margin-left 0.35s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  transition: margin-left 0.3s ease-in-out;
 }
 .menu-lateral:hover ~ .contenido-principal,
 .menu-lateral.menu-abierto-js ~ .contenido-principal {
   margin-left: var(--ancho-lateral);
 }
 
-/* --- Cabecera / Barra Superior (sin cambios de tu CSS original) --- */
-.header { background-color: var(--color-header-background); padding: 0.875rem 1.25rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 500; margin: -1.25rem -1.25rem 1.25rem -1.25rem; }
-/* ... (resto de estilos del header se mantienen igual que en tu CSS) ... */
-.header .search-bar { display: flex; align-items: center; flex-grow: 1; margin-right: 1.25rem; max-width: 25rem; background-color: rgba(255, 255, 255, 0.1); border-radius: 1.25rem; overflow: hidden; border: 0.0625rem solid rgba(255, 255, 255, 0.3); height: 2.1875rem; }
-.header .search-bar input[type="text"] { padding: 0.5rem 0.9375rem; border: none; outline: none; font-size: 0.9375rem; background: none; color: var(--text-color-light); flex-grow: 1; height: 100%; }
-.header .search-bar input[type="text"]::placeholder { color: rgba(255, 255, 255, 0.6); }
-.header .search-bar button { padding: 0 0.9375rem; background-color: var(--color-tuttor-up-green); color: var(--text-color-dark); border: none; border-radius: 0 1.25rem 1.25rem 0; cursor: pointer; font-size: 1rem; transition: background-color 0.3s ease; height: 100%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.header .search-bar button:hover { background-color: #5cb8a0; }
+/* --- Cabecera / Barra Superior --- */
+.header {
+  background-color: var(--color-header-background);
+  padding: 0.75rem 1.25rem;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 500;
+  margin: -1.25rem -1.25rem 1.25rem -1.25rem;
+}
+.header .search-bar {
+  display: flex; align-items: center; flex-grow: 1; margin-right: 1rem;
+  max-width: 22rem;
+  background-color: rgba(50, 55, 63, 0.7);
+  border-radius: 1.875rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15); /* Borde más sutil */
+  height: 2.5rem;
+}
+.header .search-bar input[type="text"] {
+  padding: 0.5rem 1.125rem; /* 18px padding izquierdo */
+  font-size: 0.9375rem; background: none; color: var(--text-color-light);
+  flex-grow: 1; height: 100%; border: none; outline: none;
+}
+.header .search-bar input[type="text"]::placeholder { color: var(--text-color-muted); }
+.header .search-bar button {
+  padding: 0 1.125rem; /* 18px */
+  background-color: var(--color-tuttor-up-green); color: var(--text-color-dark);
+  border: none; border-radius: 0 1.875rem 1.875rem 0; cursor: pointer;
+  font-size: 1rem; transition: background-color 0.2s ease; height: 100%;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.header .search-bar button:hover { background-color: #65d8c0; }
+
 .header .right-icons { display: flex; align-items: center; flex-shrink: 0; }
-.header .right-icons .icon-button { background: none; border: none; color: var(--text-color-light); font-size: 1.5rem; margin-left: 1rem; cursor: pointer; transition: color 0.3s ease; padding: 0; display: flex; align-items: center; text-decoration: none; }
-.header .right-icons .icon-button:hover { color: var(--color-tuttor-up-green); }
-.header .right-icons .ar-button { background-color: var(--color-tuttor-up-green); color: var(--text-color-dark); border-radius: 1rem; padding: 0.3125rem 1rem; font-size: 1rem; margin-left: 1.5rem; display: flex; align-items: center;text-decoration: none; }
-.header .right-icons .ar-button:hover { background-color: #5cb8a0; color: var(--text-color-dark); }
-.header .right-icons .ar-button i { margin-right: 0.3125rem; font-size: 1.2rem; }
-.header .right-icons .ar-text { font-size: 0.9375rem; font-weight: bold; }
+.header .right-icons .icon-button {
+  background: none; border: none; color: var(--text-color-muted);
+  font-size: 1.375rem; margin-left: 1.25rem;
+  cursor: pointer; transition: color 0.2s ease; padding: 0.25rem; /* Añadido padding para área de clic */
+  display: flex; align-items: center; text-decoration: none;
+  line-height: 1; /* Para evitar que el padding afecte la altura */
+}
+.header .right-icons .icon-button:hover { color: var(--text-color-light); }
+
+.header .right-icons .ar-button {
+  background-color: var(--color-tuttor-up-green); color: var(--text-color-dark);
+  border-radius: 0.5rem;
+  padding: 0.4375rem 0.875rem;
+  font-size: 1rem; margin-left: 1.25rem; display: flex; align-items: center; text-decoration: none;
+  font-weight: 500;
+}
+.header .right-icons .ar-button:hover { background-color: #65d8c0; }
+.header .right-icons .ar-button i { margin-right: 0.375rem; font-size: 1.125rem; }
+.header .right-icons .ar-text { font-size: 0.9375rem; }
 
 
-/* --- Contenedor y Tarjetas de Materias (Grid Layout con AJUSTES) --- */
+/* --- Contenedor y Tarjetas de Materias (GRID LAYOUT AJUSTADO A IMAGEN) --- */
 .contenedor-materias {
   display: grid;
-  grid-template-columns: var(--grid-col-calc) var(--grid-col-fisqui) var(--grid-col-mate);
-  grid-template-rows: auto auto; /* Fila 1 para Física y Mate, Fila 2 para Química */
-                                  /* La altura de la fila 1 será determinada por el contenido de Física/Mate */
-  gap: var(--grid-gap, 1.25rem);
-  margin-top: 2rem;
-  max-width: 60rem; /* 960px - Aumentado para acomodar anchos */
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
-  z-index: 2;
+  /* Usaremos 5 columnas para el layout deseado */
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: auto auto; /* Dos filas principales */
+  gap: var(--grid-gap, 1rem); /* 16px gap */
+  margin-top: 2.5rem;
+  max-width: 68rem; /* 1088px, más ancho para acomodar el layout */
+  margin-left: auto; margin-right: auto;
+  position: relative; z-index: 2;
 }
 
-/* Asignación de áreas para el nuevo layout */
+/* Asignación de áreas para el layout de la imagen:
+   Col 1-2: Cálculo (40% del ancho total aprox)
+   Col 3: Física (20% del ancho total aprox, más angosto)
+   Col 4-5: Matemáticas (40% del ancho total aprox)
+   Col 3-4: Química (debajo de Física, extendiéndose a la columna de Matemáticas)
+*/
 .materia-card.calculo {
-  grid-row: 1 / 3; /* Ocupa dos filas */
-  grid-column: 1 / 2;
+  grid-column: 1 / span 2; /* Ocupa 2 de 5 columnas */
+  grid-row: 1 / span 2;    /* Ocupa 2 filas */
 }
 .materia-card.fisica {
-  grid-row: 1 / 2;    /* Fila 1 */
-  grid-column: 2 / 3; /* Columna del medio (más ancha) */
+  grid-column: 3 / span 1; /* Ocupa 1 columna (angosta) */
+  grid-row: 1 / 2;
 }
 .materia-card.matematica {
-  grid-row: 1 / 2;    /* Fila 1 (misma altura que física) */
-  grid-column: 3 / 4; /* Columna derecha */
+  grid-column: 4 / span 2; /* Ocupa 2 columnas */
+  grid-row: 1 / 2;         /* Misma fila que Física */
 }
 .materia-card.quimica {
-  grid-row: 2 / 3;    /* Fila 2 */
-  grid-column: 2 / 3; /* Columna del medio (misma columna que física, por ende mismo ancho) */
-                      /* Si quisieras que Química abarque hasta parte de la columna de Matemáticas,
-                         necesitarías un grid de más columnas o usar subgrid (complejo).
-                         Por ahora, Química tendrá el ancho de la columna --grid-col-fisqui. */
+  grid-column: 3 / span 2; /* Comienza en la columna de Física y abarca 2 columnas (Física + primera de Mate) */
+  grid-row: 2 / 3;         /* Debajo de Física/Matemáticas */
 }
 
-/* Estilos generales de las tarjetas (sin cambios de tu CSS original) */
-.materia-card { text-decoration: none; padding: 1.25rem; /* 20px */ border-radius: 0.75rem; /* 12px */ display: flex; flex-direction: column; transition: transform 0.2s ease, box-shadow 0.2s ease; min-height: 8.75rem; /* 140px */ box-shadow: 0 0.25rem 0.625rem rgba(0,0,0,0.3); position: relative; overflow: hidden; width: 100%; color: var(--text-color-light); }
-.materia-card:hover { transform: translateY(-0.3125rem) scale(1.02); box-shadow: 0 0.5rem 0.9375rem rgba(0,0,0,0.4); }
-.materia-card.calculo { background-color: var(--color-calculo); color: var(--text-color-dark); }
-.materia-card.fisica { background-color: var(--color-fisica); color: var(--text-color-light); }
-.materia-card.matematica { background-color: var(--color-matematicas); color: var(--text-color-dark); }
-.materia-card.quimica { background-color: var(--color-quimica); color: var(--text-color-dark); }
+/* Estilos generales de las tarjetas */
+.materia-card {
+  text-decoration: none;
+  padding: 1.25rem; /* 20px */
+  border-radius: 0.625rem; /* 10px */
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  box-shadow: 0 0.125rem 0.5rem rgba(0,0,0,0.2); /* Sombra más suave */
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  color: var(--text-color-light);
+  min-height: 10rem; /* Altura mínima para tarjetas pequeñas */
+}
+.materia-card:hover {
+  transform: translateY(-0.1875rem) scale(1.01);
+  box-shadow: 0 0.375rem 1rem rgba(0,0,0,0.25);
+}
+
+/* Colores de tarjetas (de variables.css) */
+.materia-card.calculo { background-color: var(--color-calculo); }
+.materia-card.fisica { background-color: var(--color-fisica); }
+.materia-card.matematica { background-color: var(--color-matematicas); }
+.materia-card.quimica { background-color: var(--color-quimica); }
 
 
-/* Contenido interno de las tarjetas (AJUSTES DE TAMAÑO) */
-.materia-content { display: flex; flex-direction: column; align-items: flex-start; width: 100%; flex-grow: 1; }
-.materia-info { display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; width: 100%; }
+/* Contenido interno de las tarjetas */
+.materia-content {
+  display: flex; flex-direction: column; width: 100%; flex-grow: 1;
+  justify-content: space-between; /* Icono arriba, código/descripción abajo */
+}
+.materia-info { /* Contenedor para código y descripción */
+  display: flex; flex-direction: column;
+  justify-content: flex-end; /* Descripción al final */
+  flex-grow: 1; width: 100%;
+}
 
 .materia-image-placeholder { /* Icono/Símbolo */
-  font-size: var(--tamano-icono-tarjeta-rem); /* Usa variable CSS */
-  margin-bottom: 0.5rem; /* 8px */
+  font-size: var(--tamano-icono-tarjeta-media-rem);
+  margin-bottom: 0.75rem; /* Espacio entre icono y código */
   color: inherit;
   align-self: flex-start;
 }
-/* Ajustes específicos si una tarjeta es muy alta y necesita icono más grande */
 .materia-card.calculo .materia-image-placeholder {
-  font-size: calc(var(--tamano-icono-tarjeta-rem) * 1.2); /* 20% más grande */
+  font-size: var(--tamano-icono-tarjeta-grande-rem);
 }
 
-.materia-codigo { /* Texto grande (ej. CAL-CU-LO) */
-  font-size: var(--tamano-codigo-tarjeta-base-rem); /* Usa variable CSS */
-  font-weight: bold;
-  line-height: 1; /* Ajustado para letras grandes */
-  text-transform: uppercase;
-  color: inherit;
-  flex-shrink: 0;
-  margin-bottom: 0.625rem; /* 10px */
+.materia-codigo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: var(--tamano-codigo-fismatqui-rem);
+  font-weight: 700;
+  line-height: var(--line-height-codigo-fismatqui);
+  text-transform: uppercase; color: inherit; flex-shrink: 0; text-align: left;
 }
-/* Ajustes específicos de código */
 .materia-card.calculo .materia-codigo {
-  font-size: calc(var(--tamano-codigo-tarjeta-base-rem) * 1.5); /* 50% más grande */
-  line-height: 0.9;
+  font-size: var(--tamano-codigo-calculo-rem);
+  line-height: var(--line-height-codigo-calculo);
 }
-.materia-card.matematica .materia-codigo { /* Matemáticas un poco más grande que física/química */
-  font-size: calc(var(--tamano-codigo-tarjeta-base-rem) * 1.2);
+.materia-card.matematica .materia-codigo {
+  font-size: calc(var(--tamano-codigo-fismatqui-rem) * 1.2);
 }
-
 
 .materia-descripcion {
-  font-size: var(--tamano-descripcion-tarjeta-rem); /* Usa variable CSS */
-  color: inherit;
-  opacity: 0.9;
-  text-align: left;
-  width: 100%;
+  font-family: 'Poppins', sans-serif;
+  font-size: var(--tamano-descripcion-tarjeta-rem);
+  color: inherit; opacity: 0.8; /* Ligeramente menos opaco */
+  text-align: left; width: 100%;
+  margin-top: 0.5rem; /* Espacio entre código y descripción */
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 64rem) { /* Ajustar breakpoint si es necesario, ej. 1024px */
+    .contenedor-materias {
+        max-width: 95%; /* Ocupar más del ancho disponible */
+        gap: 0.75rem;
+    }
+}
+
+@media (max-width: 48rem) { /* 768px */
+  body { background-position: center -3rem; }
+  .menu-lateral { left: calc(-1 * var(--ancho-lateral)); }
+  .contenido-principal { margin-left: 0; padding-top: 4.5rem; padding-left: 0.75rem; padding-right: 0.75rem; }
+  .menu-lateral:hover ~ .contenido-principal,
+  .menu-lateral.menu-abierto-js ~ .contenido-principal { margin-left: 0; }
+
+  .header { padding: 0.625rem 0.75rem; }
+  .header .search-bar { margin-right: 0.5rem; height: 2.25rem; max-width: calc(100% - 8rem); }
+  .header .right-icons .icon-button { margin-left: 0.625rem; font-size: 1.25rem; }
+  .header .right-icons .ar-button { margin-left: 0.625rem; padding: 0.375rem 0.625rem; }
+
+  .contenedor-materias {
+    grid-template-columns: 1fr 1fr; /* Dos columnas en tabletas */
+    margin-top: 1.25rem;
+  }
+  .materia-card.calculo { grid-column: 1 / span 2; grid-row: auto; } /* Cálculo ocupa todo el ancho */
+  .materia-card.fisica { grid-column: 1 / span 1; grid-row: auto; }
+  .materia-card.matematica { grid-column: 2 / span 1; grid-row: auto; }
+  .materia-card.quimica { grid-column: 1 / span 2; grid-row: auto; } /* Química ocupa todo el ancho debajo */
+
+  .materia-card { min-height: 9rem; padding: 0.75rem; }
+  .materia-image-placeholder { font-size: calc(var(--tamano-icono-tarjeta-media-rem) * 0.7); }
+  .materia-card.calculo .materia-image-placeholder { font-size: calc(var(--tamano-icono-tarjeta-grande-rem) * 0.6); }
+  .materia-codigo { font-size: calc(var(--tamano-codigo-fismatqui-rem) * 0.8); line-height: 1; }
+  .materia-card.calculo .materia-codigo { font-size: calc(var(--tamano-codigo-calculo-rem) * 0.5); line-height: 0.9; }
+  .materia-descripcion { font-size: calc(var(--tamano-descripcion-tarjeta-rem) * 0.9); }
+}
+
+@media (max-width: 36rem) { /* 576px - Móvil pequeño, una columna */
+    .contenedor-materias {
+      grid-template-columns: 1fr;
+    }
+    .materia-card.calculo,
+    .materia-card.fisica,
+    .materia-card.matematica,
+    .materia-card.quimica {
+        grid-column: 1 / span 1 !important; /* Forzar una columna */
+    }
+    .header .search-bar { max-width: calc(100% - 6rem); }
 }
 
 
-/* --- Responsive Design --- (Sin cambios mayores de tu CSS original, ya se ajustan tamaños con rem) */
+/* --- Responsive Design --- (Simplificado, enfocado en una columna) */
 @media (max-width: 48rem) { /* 768px */
-  body { background-attachment: scroll; background-position: center bottom; background-size: cover; }
-  body::before { position: absolute; min-height: 100%; height: auto; }
+  body { background-position: center -5rem; /* Mover fondo un poco arriba */ }
 
-  .menu-lateral {
-    /* En móvil, podrías querer que el menú se superponga en lugar de empujar el contenido,
-       o controlarlo completamente con JS y un botón hamburguesa.
-       Si se superpone, .contenido-principal no necesitaría cambiar su margin-left. */
-    left: calc(-1 * var(--ancho-lateral)); /* Totalmente oculto, necesita JS para mostrar */
-  }
-  /* .menu-lateral.menu-abierto-js { left: 0; } /* Clase para JS */
-
-  .contenido-principal {
-    margin-left: 0; /* Menú no empuja por defecto en móvil */
-    padding-top: 5rem; /* Más espacio para header fijo */
-    padding-left: 1rem; padding-right: 1rem;
+  .menu-lateral { left: calc(-1 * var(--ancho-lateral)); }
+  .menu-lateral.menu-abierto-js { left: 0; } /* Para control con JS */
+  .contenido-principal { margin-left: 0; padding-top: 4.5rem; padding-left: 0.75rem; padding-right: 0.75rem; }
+  .menu-lateral:hover ~ .contenido-principal, /* Desactivar empuje en hover para móvil */
+  .menu-lateral.menu-abierto-js ~ .contenido-principal {
+    margin-left: 0; /* El menú se superpone */
   }
 
-  .header {
-    position: fixed; width: 100%; margin: 0;
-    padding: 0.75rem 1rem;
-    z-index: 990;
-  }
-  /* ... (resto de los estilos responsive del header se mantienen) ... */
-  .header .search-bar { max-width: none; margin-right: 0.5rem; height: 2.25rem; }
-  .header .search-bar input[type="text"] { font-size: 0.875rem; padding: 0.25rem 0.75rem;}
-  .header .search-bar button { padding: 0 0.75rem; }
-  .header .right-icons .icon-button { font-size: 1.375rem; margin-left: 0.75rem; }
-  .header .right-icons .ar-button { padding: 0.25rem 0.75rem; margin-left: 0.75rem; }
-  .header .right-icons .ar-button i { font-size: 1.125rem; }
-  .header .right-icons .ar-text { font-size: 0.875rem; }
-
+  .header { padding: 0.625rem 0.75rem; } /* Más pequeño */
+  .header .search-bar { margin-right: 0.5rem; height: 2.25rem; max-width: calc(100% - 7rem); } /* Ajusta max-width */
+  .header .right-icons .icon-button { margin-left: 0.5rem; font-size: 1.25rem; }
+  .header .right-icons .ar-button { margin-left: 0.5rem; padding: 0.375rem 0.625rem; }
+  .header .right-icons .ar-button i { font-size: 1rem; }
+  .header .right-icons .ar-text { font-size: 0.8125rem; }
 
   .contenedor-materias {
     grid-template-columns: 1fr; /* Una columna */
     gap: 1rem;
-    padding: 0; margin-top: 1.25rem;
+    margin-top: 1.5rem;
+    /* aspect-ratio: unset;  Eliminar aspect-ratio en móvil */
+    /* height: auto; */
   }
 
   .materia-card,
@@ -340,25 +488,21 @@ body::before {
   .materia-card.fisica,
   .materia-card.quimica,
   .materia-card.matematica {
-    grid-area: auto !important;
-    min-height: 7.5rem; /* 120px */
+    grid-area: auto !important; /* Resetear areas */
+    min-height: 9.375rem; /* 150px mínimo en móvil */
     padding: 1rem;
-    align-items: center; text-align: center;
-    height: auto !important; align-self: auto !important;
+    text-align: left; /* Mantener alineación izquierda */
   }
-  .materia-card .materia-content { align-items: center; }
-  .materia-card .materia-info { justify-content: center; text-align: center; }
-  .materia-card .materia-descripcion { text-align: center; margin-top: 0.5rem; }
+  .materia-card .materia-content { align-items: flex-start; } /* Mantener alineación */
+  .materia-card .materia-info { justify-content: space-between; text-align: left; }
+  .materia-card .materia-descripcion { text-align: left; margin-top: 0.5rem; }
 
-  /* Ajustes de tamaño de fuentes para móvil */
-  .materia-card .materia-image-placeholder { font-size: calc(var(--tamano-icono-tarjeta-rem) * 0.8); }
-  .materia-card.calculo .materia-image-placeholder { font-size: var(--tamano-icono-tarjeta-rem); }
+  /* Tamaños en móvil */
+  .materia-image-placeholder { font-size: calc(var(--tamano-icono-tarjeta-media-rem) * 0.8); }
+  .materia-card.calculo .materia-image-placeholder { font-size: calc(var(--tamano-icono-tarjeta-grande-rem) * 0.7); }
 
+  .materia-codigo { font-size: calc(var(--tamano-codigo-fismatqui-rem) * 0.9); line-height: 1; }
+  .materia-card.calculo .materia-codigo { font-size: calc(var(--tamano-codigo-calculo-rem) * 0.6); line-height: 0.9; }
 
-  .materia-codigo { font-size: calc(var(--tamano-codigo-tarjeta-base-rem) * 0.85); }
-  .materia-card.calculo .materia-codigo { font-size: calc(var(--tamano-codigo-tarjeta-base-rem) * 1.1); }
-  .materia-card.matematica .materia-codigo { font-size: var(--tamano-codigo-tarjeta-base-rem); }
-
-
-  .materia-descripcion { font-size: calc(var(--tamano-descripcion-tarjeta-rem) * 0.9); }
+  .materia-descripcion { font-size: calc(var(--tamano-descripcion-tarjeta-rem) * 0.95); }
 }

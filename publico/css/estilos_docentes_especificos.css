@@ -1,0 +1,577 @@
+/* publico/css/estilos_docentes_especificos.css */
+/* Importar variables si no se importan ya globalmente en el layout ANTES de este archivo */
+/* @import 'variables.css'; /* Esto ya está en estilos_globales.css */
+
+/* Estilos de la barra lateral de filtros para DOCENTES */
+.barra-lateral-filtros-docentes {
+  width: 300px; /* Ajusta según tu diseño, era 340px */
+  background: var(--fondo-barra-lateral, #222); /* Usar variable de docentes si la tienes, o una global */
+  padding: 20px;
+  /* position: fixed; top: 0; left: var(--ancho-lateral); bottom: 0; */ /* Esto no funcionará bien con el layout principal */
+  /* Debe ser parte del flujo normal de .contenido-pagina-actual o posicionarse de otra forma */
+  /* Para una solución simple, la pondremos al lado del contenido de docentes usando flex o grid */
+  height: calc(100vh - 100px); /* Altura aproximada, ajustar */
+  overflow-y: auto;
+  margin-right: 20px; /* Espacio entre filtros y contenido de docentes */
+  flex-shrink: 0; /* Para que no se encoja si el contenido es grande */
+}
+
+.barra-lateral__busqueda {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.barra-lateral__icono-busqueda {
+  font-size: 1.2rem;
+  margin-right: 10px;
+  color: var(--texto-atenuado);
+}
+.barra-lateral__entrada {
+  flex: 1;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 20px 0 0 20px;
+  background: #333;
+  color: var(--texto-claro);
+  outline: none;
+}
+.barra-lateral__boton-busqueda {
+  padding: 10px 20px;
+  border: 2px solid var(--color-acento, #3bd1aa);
+  background: transparent;
+  color: var(--color-acento, #3bd1aa);
+  border-radius: 0 20px 20px 0;
+  cursor: pointer;
+  transition: background .2s;
+}
+.barra-lateral__boton-busqueda:hover {
+  background: var(--color-acento, #3bd1aa);
+  color: var(--fondo-oscuro);
+}
+.barra-lateral__grupo-filtro {
+  background: #2a2a2a;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+.barra-lateral__titulo-filtro {
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: var(--texto-atenuado);
+}
+.barra-lateral__item-filtro {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  cursor: pointer;
+  font-size: .95rem;
+  color: var(--texto-claro);
+}
+.barra-lateral__checkbox-filtro {
+  margin-right: 10px;
+  accent-color: var(--color-acento, #3bd1aa); /* Color del check */
+}
+.barra-lateral__icono-valoracion {
+    color: var(--color-acento, #3bd1aa);
+    margin: 0 1px;
+}
+
+
+/* Contenedor principal para la página de docentes (filtros + contenido) */
+.vista-docentes-wrapper {
+    display: flex;
+    /* align-items: flex-start; */ /* Opcional */
+}
+
+/* Contenido principal de la sección DOCENTES (sin la barra de filtros) */
+.contenido-principal-docentes {
+  flex: 1; /* Ocupa el espacio restante */
+  display: flex;
+  flex-direction: column;
+}
+
+.barra-superior-docentes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0px 20px 0px; /* Ajustar padding, no necesita tanto como el header principal */
+}
+.barra-superior__titulo-docentes {
+  font-size: 3rem; /* Más pequeño que el de la materia original */
+  color: rgba(255,255,255,0.1);
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.barra-superior__acciones-docentes button {
+  margin-left: 10px;
+  background: none;
+  border: none;
+  color: var(--texto-claro);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* Carrusel de Docentes */
+.carrusel-docentes {
+  position: relative;
+  padding: 0 50px; /* Espacio para los botones de navegación */
+  flex-grow: 1;
+}
+.carrusel__tarjetas {
+  display: grid;
+  /* Se ajustará por JS, pero podemos dar un default */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+  gap: 20px;
+  padding: 20px 0;
+}
+.carrusel__boton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--fondo-tarjeta, #2e3a3f); /* Usar variable de docentes si la tienes */
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--texto-claro);
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+.carrusel__boton--anterior { left: 5px; }
+.carrusel__boton--siguiente { right: 5px; }
+
+/* Tarjetas de Docente */
+.tarjeta-docente {
+  background: var(--fondo-tarjeta, #2e3a3f);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex; /* Para alinear imagen y contenido */
+  align-items: flex-start; /* Alinea items al inicio del eje transversal */
+  position: relative;
+  color: var(--texto-claro);
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+.tarjeta-docente:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.tarjeta__etiqueta-docente { /* 'Destacado' */
+  position: absolute;
+  top: 10px; /* Ajustado */
+  left: 10px; /* Ajustado */
+  background: var(--color-acento, #3bd1aa);
+  color: var(--fondo-oscuro);
+  font-size: .7rem; /* Ajustado */
+  padding: 3px 8px; /* Ajustado */
+  border-radius: 12px;
+  font-weight: bold;
+}
+.tarjeta__imagen-docente {
+  width: 100px; /* Ajustado */
+  height: 100px; /* Ajustado */
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px; /* Espacio entre imagen y contenido */
+  border: 3px solid var(--color-acento-verde-claro, #76f0d6); /* Borde sutil */
+}
+.tarjeta__contenido-docente {
+  flex: 1; /* El contenido toma el resto del espacio */
+}
+.tarjeta__titulo-docente {
+  margin-top: 0;
+  margin-bottom: 8px; /* Ajustado */
+  font-size: 1.2rem; /* Ajustado */
+  color: var(--texto-claro);
+}
+.tarjeta__valoracion-docente {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.tarjeta__icono-valoracion-star { /* Icono de estrella */
+  margin-right: 3px; /* Ajustado */
+  color: var(--color-acento, #3bd1aa);
+  font-size: .9rem;
+}
+.tarjeta__texto-valoracion-docente { /* "X opiniones" */
+  margin-left: 8px; /* Ajustado */
+  font-size: .8rem; /* Ajustado */
+  color: var(--texto-atenuado);
+}
+.tarjeta__precio-docente,
+.tarjeta__experiencia-docente {
+  font-size: .9rem;
+  margin-bottom: 6px; /* Ajustado */
+  color: var(--texto-claro);
+  display: flex;
+  align-items: center;
+}
+.tarjeta__experiencia-docente .fas.fa-award {
+    margin-right: 6px;
+    color: var(--texto-atenuado);
+}
+.tarjeta__boton-agenda {
+  margin-top: 12px; /* Ajustado */
+  display: inline-block;
+  padding: 8px 15px; /* Ajustado */
+  border: 2px solid var(--color-acento, #3bd1aa);
+  border-radius: 20px;
+  color: var(--color-acento, #3bd1aa);
+  text-decoration: none;
+  font-size: .9rem;
+  transition: background .2s, color .2s;
+  font-weight: 500;
+}
+.tarjeta__boton-agenda:hover {
+  background: var(--color-acento, #3bd1aa);
+  color: var(--fondo-oscuro);
+}
+
+
+/* Vista de Reserva (cuando se muestra) */
+.reserva-vista-visible {
+    display: block !important; /* Para mostrarla cuando se necesite */
+}
+.reserva-vista-oculta {
+    display: none;
+}
+#reserva-container-docentes {
+  /* display: none; Se controla con clases JS */
+  /* position: fixed; top: 0; left: 0; width: 100%; height: 100%; */ /* No como modal pantalla completa */
+  /* background: var(--fondo-oscuro); z-index: 1000; overflow-y: auto; */
+  padding: 20px;
+  background-color: var(--color-background); /* O un color ligeramente diferente */
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.boton-volver-docentes {
+    position: absolute;
+    top: 20px; /* Relativo al .contenido-principal-docentes si es su padre posicionado */
+    right: 20px; /* O ajusta según dónde esté #reserva-container-docentes */
+    padding: 8px 16px;
+    background: var(--color-acento, #3bd1aa);
+    color: var(--fondo-oscuro);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+.boton-volver-docentes:hover {
+    background-color: #2cbea0; /* Un verde ligeramente más oscuro */
+}
+.boton-volver-docentes i {
+    margin-right: 8px;
+}
+
+
+.reserva-contenido {
+  display: flex;
+  /* max-width: 1200px; */ /* Ya no es pantalla completa */
+  width: 100%;
+  padding: 20px 0; /* Ajustar padding */
+  gap: 40px; /* Reducido de 130px */
+  /* margin-left: var(--ancho-lateral); */ /* No aplica aquí */
+}
+
+.reserva-perfil {
+  flex: 0 0 35%; /* Ajustado */
+  text-align: center;
+  padding: 15px;
+  background-color: var(--fondo-tarjeta, #2e3a3f);
+  border-radius: 8px;
+}
+.reserva-imagen { /* Imagen del docente en la vista de reserva */
+  width: 200px; /* Ajustado */
+  height: 200px; /* Ajustado */
+  border-radius: 50%;
+  border: 6px solid var(--color-gris-dias, #555); /* Usar variable de docentes si hay */
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+.reserva-calificacion { /* Estrellas en la vista de reserva */
+  margin: 10px 0;
+  font-size: 1.1rem; /* Ajustado */
+}
+.reserva-calificacion .fas.fa-star {
+    color: var(--color-acento, #3bd1aa);
+    margin: 0 3px;
+}
+.reserva-descripcion {
+  margin-top: 10px;
+  font-size: 0.9rem; /* Ajustado */
+  line-height: 1.5;
+  color: var(--texto-atenuado);
+  text-align: left;
+}
+.reserva-experiencia {
+  margin-top: 10px;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--texto-claro);
+}
+
+.reserva-calendario-contenedor {
+  flex: 0 0 60%; /* Ajustado */
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  background-color: var(--fondo-tarjeta, #2e3a3f);
+  border-radius: 8px;
+}
+.reserva-header-calendario {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0 15px 0; /* Ajustado */
+  border-bottom: 1px solid var(--color-gris-dias, #555);
+  margin-bottom: 15px;
+}
+.reserva-titulo-calendario { /* Nombre del docente en el calendario */
+  font-size: 1.8rem; /* Ajustado */
+  color: var(--texto-claro); /* Era muy tenue antes */
+  font-weight: 500; /* Ajustado */
+  letter-spacing: 1px;
+}
+.reserva-calendario-header-dias { /* Lun, Mar, Mie ... */
+  display: grid;
+  padding: 0 10px; /* Ajustado */
+  grid-template-columns: repeat(7,1fr);
+  /* column-gap: 10px; */ /* Ajustado, el gap de la grilla principal lo maneja */
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--texto-atenuado);
+  font-size: 0.85rem; /* Ajustado */
+  /* width: 100%; */ /* Ajustado, no 120% */
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+.reserva-calendario-dias { /* Contenedor de los días del mes */
+  display: grid;
+  grid-template-columns: repeat(7,1fr);
+  gap: 8px; /* Ajustado */
+  /* width: 100%; */ /* Ajustado */
+  /* height: auto; */ /* Se ajustará al contenido */
+  flex-grow: 1; /* Para que ocupe el espacio */
+}
+.dia-calendario {
+  background: var(--color-gris-dias, #444); /* Ligeramente más claro que el #555 original */
+  border-radius: 6px; /* Ajustado */
+  position: relative;
+  cursor: pointer;
+  min-height: 70px; /* Ajustado */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+  font-weight: 500;
+}
+.dia-calendario:hover:not(.dia-vacio) {
+    background-color: #5a5a5a;
+}
+.dia-calendario.dia-vacio { /* Para los días fuera del mes actual */
+    background: transparent;
+    cursor: default;
+}
+.dia-calendario span { /* Número del día */
+  /* position: absolute; top: 8px; left: 8px; */ /* Centrado ahora */
+  color: var(--texto-atenuado);
+  font-size: 0.9rem;
+}
+.dia-calendario.disponible {
+  background: var(--color-acento-verde, #3bd1aa) !important; /* Usar variable de docentes si hay */
+  color: var(--fondo-oscuro);
+}
+.dia-calendario.disponible span {
+  color: var(--fondo-oscuro);
+  font-weight: bold;
+}
+
+
+/* Modal horarios (para docentes) */
+.modal-horarios { /* Era .modal */
+  display: none; /* Se controla por JS */
+  position: fixed;
+  z-index: 2000; /* Encima de todo */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6); /* Más oscuro */
+  display: flex; /* Para centrar el contenido */
+  align-items: center;
+  justify-content: center;
+}
+.modal-horarios .modal-contenido { /* Era .modal-contenido */
+  background: var(--fondo-lateral, #171616); /* Usar variable de docentes o global */
+  margin: 0; /* Ya no se centra con margin, sino con flex */
+  padding: 25px; /* Más padding */
+  border-radius: 10px;
+  width: 90%;
+  max-width: 450px; /* Un poco más ancho */
+  position: relative;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+}
+.modal-horarios .cerrar-modal {
+  color: var(--texto-atenuado);
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.8rem; /* Más grande */
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 1;
+}
+.modal-horarios .cerrar-modal:hover {
+    color: var(--texto-claro);
+}
+.modal-horarios h2 {
+    text-align: center;
+    color: var(--color-acento, #3bd1aa);
+    margin-bottom: 25px;
+    font-size: 1.5rem;
+}
+.modal-horarios .horarios-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr); /* Mantenemos 2 columnas */
+  gap: 12px; /* Un poco más de espacio */
+  margin-top: 10px; /* Reducido porque el h2 ya da espacio */
+}
+.modal-horarios .boton-horario {
+  padding: 12px; /* Más padding */
+  border: 2px solid var(--texto-atenuado); /* Borde más sutil */
+  border-radius: 8px; /* Menos redondeado */
+  background: var(--fondo-oscuro);
+  color: var(--texto-claro);
+  cursor: pointer;
+  text-align: center;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.modal-horarios .boton-horario.seleccionado,
+.modal-horarios .boton-horario:hover {
+  background: var(--color-acento-verde, #3bd1aa); /* Usar variable de docentes */
+  color: var(--fondo-oscuro);
+  border-color: var(--color-acento-verde, #3bd1aa);
+  font-weight: bold;
+}
+.modal-horarios .acciones-modal {
+  display: flex;
+  justify-content: space-between; /* Mantenemos esto */
+  margin-top: 25px; /* Más espacio */
+  gap: 15px;
+}
+.modal-horarios .boton-modal {
+  flex: 1;
+  /* margin: 0 5px; */ /* Eliminado, usamos gap */
+  padding: 12px; /* Más padding */
+  border-radius: 8px; /* Menos redondeado */
+  border: 2px solid var(--color-acento-verde, #3bd1aa); /* Usar variable de docentes */
+  background: transparent; /* Fondo transparente */
+  color: var(--color-acento-verde, #3bd1aa);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  font-weight: 500;
+  font-size: 1rem;
+}
+.modal-horarios .boton-modal:hover {
+  background: var(--color-acento-verde, #3bd1aa);
+  color: var(--fondo-oscuro);
+}
+.modal-horarios .boton-modal#confirmEliminarDocente { /* Botón de eliminar específico */
+    border-color: #e74c3c;
+    color: #e74c3c;
+}
+.modal-horarios .boton-modal#confirmEliminarDocente:hover {
+    background-color: #e74c3c;
+    color: var(--texto-claro);
+}
+
+/* Estilos responsivos específicos para la sección de docentes si son necesarios */
+@media (max-width: 992px) { /* Tablets y pantallas medianas */
+    .vista-docentes-wrapper {
+        flex-direction: column; /* Filtros arriba, contenido abajo */
+    }
+    .barra-lateral-filtros-docentes {
+        width: 100%; /* Ocupa todo el ancho */
+        margin-right: 0;
+        margin-bottom: 20px; /* Espacio antes del contenido de docentes */
+        height: auto; /* Altura automática */
+    }
+    .reserva-contenido {
+        flex-direction: column;
+        align-items: center; /* Centrar perfil y calendario */
+    }
+    .reserva-perfil, .reserva-calendario-contenedor {
+        flex-basis: auto; /* Ancho automático */
+        width: 100%;
+        max-width: 500px; /* Limitar ancho para que no se extienda demasiado */
+    }
+    .carrusel__tarjetas {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Tarjetas un poco más pequeñas */
+    }
+}
+
+@media (max-width: 768px) { /* Ya tienes media queries globales, esto es para refinar docentes */
+    .barra-superior__titulo-docentes {
+        font-size: 2rem; /* Título más pequeño en móviles */
+    }
+    .carrusel-docentes {
+        padding: 0 10px; /* Menos padding para el carrusel */
+    }
+    .carrusel__boton { /* Botones de carrusel más pequeños */
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+    .carrusel__boton--anterior { left: 0px; }
+    .carrusel__boton--siguiente { right: 0px; }
+
+    .tarjeta__imagen-docente {
+        width: 80px;
+        height: 80px;
+        margin-right: 15px;
+    }
+    .tarjeta__titulo-docente {
+        font-size: 1.1rem;
+    }
+
+    .reserva-imagen {
+        width: 150px;
+        height: 150px;
+    }
+    .reserva-titulo-calendario {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) { /* Móviles pequeños */
+    .carrusel__tarjetas {
+        grid-template-columns: 1fr; /* Una tarjeta por fila */
+    }
+    .barra-lateral-filtros-docentes .barra-lateral__busqueda {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .barra-lateral-filtros-docentes .barra-lateral__entrada,
+    .barra-lateral-filtros-docentes .barra-lateral__boton-busqueda {
+        width: 100%;
+        border-radius: 20px; /* Redondeo completo para ambos */
+    }
+    .barra-lateral-filtros-docentes .barra-lateral__entrada {
+        text-align: center;
+    }
+    .modal-horarios .horarios-grid {
+        grid-template-columns: 1fr; /* Horarios en una columna */
+    }
+    .modal-horarios .acciones-modal {
+        flex-direction: column; /* Botones de reservar/eliminar en columna */
+    }
+}

@@ -1,43 +1,53 @@
- 
-  /* publico/css/variables.css */
-
+/* publico/css/variables.css */
 :root {
-  /* ... (paleta de colores sin cambios) ... */
-  --color-calculo: #76f0d6;
+  /* ... (Colores de tarjetas y generales como en la última versión que te di) ... */
+  --color-calculo: #349b79;
   --color-fisica: #349b79;
   --color-matematicas: #5ce1e6;
-  --color-quimica: #e0e0e0;
+  --color-quimica: #6c757d; /* Gris oscuro/medio para Química */
+
   --color-tuttor-up-green: #76f0d6;
-  --color-header-background: rgba(0, 0, 0, 0.5);
+  --color-header-background: rgba(37, 41, 48, 0.8);
   --color-background: #1a1d21;
   --color-menu-background: #252930;
   --text-color-light: #ffffff;
   --text-color-dark: #222222;
-  --text-color-muted: #aaaaaa;
+  --text-color-muted: #adb5bd;
 
-  /* Anchos del menú lateral */
-  --menu-width-expanded: 250px; /* 15.625rem - Ligeramente más ancho para mejor visualización del texto */
-  --menu-width-collapsed: 75px;  /* 4.6875rem - Ligeramente más ancho para iconos más grandes */
+  /* Menú Lateral Principal (de la sección Materias) */
+  --menu-width-expanded: 240px; /* 15rem */
+  --menu-width-collapsed: 70px;  /* 4.375rem */
   --ancho-lateral: var(--menu-width-expanded);
   --asa-lateral: var(--menu-width-collapsed);
   --fondo-lateral: var(--color-menu-background);
-  --texto-atenuado: var(--text-color-light);
+  --texto-atenuado: var(--text-color-muted);
   --texto-claro: var(--color-tuttor-up-green);
 
-  /* Tamaños de fuente base y para elementos específicos */
-  --tamano-fuente-base-rem: 1rem;      /* 16px */
-  --tamano-fuente-sm-rem: 0.9375rem; /* 15px */
-  --tamano-fuente-lg-rem: 1.125rem;  /* 18px */
-  --tamano-icono-menu-rem: 1.375rem; /* 22px - Iconos de menú más grandes */
-  --tamano-texto-menu-rem: 1rem;     /* 16px - Texto de menú más grande */
-  --tamano-icono-tarjeta-rem: 2.875rem; /* 46px - Iconos de tarjeta más grandes */
-  --tamano-codigo-tarjeta-base-rem: 2rem; /* 32px - Código base más grande */
-  --tamano-descripcion-tarjeta-rem: 1rem; /* 16px - Descripción más grande */
+  /* Tamaños de fuente para la sección Materias */
+  --tamano-fuente-base-rem: 1rem;
+  --tamano-icono-menu-rem: 1.5rem; /* Iconos de menú un poco más grandes */
+  --tamano-texto-menu-rem: 1rem;   /* Texto de menú un poco más grande */
 
+  --tamano-icono-tarjeta-grande-rem: 5rem; /* Cálculo */
+  --tamano-icono-tarjeta-media-rem: 3.25rem;  /* Física, Mate */
+  --tamano-icono-tarjeta-quimica-rem: 3rem; /* Química */
 
-  /* Gap entre elementos del grid */
-  --grid-gap: 20px; /* 1.25rem */
-  --grid-col-calc: 2.5fr;    /* Cálculo */
-  --grid-col-fisqui: 3.5fr;  /* Columna para Física y Química (más ancha) */
-  --grid-col-mate: 2fr;      /* Columna para Matemáticas (más angosta que Col2) */
+  --tamano-codigo-calculo-rem: 6.5rem;
+  --line-height-codigo-calculo: 0.8;
+  --tamano-codigo-fismat-rem: 2.5rem; /* Física y Mate */
+  --line-height-codigo-fismat: 0.85;
+  --tamano-codigo-quimica-rem: 2.25rem; /* Química */
+  --line-height-codigo-quimica: 0.9;
+
+  --tamano-descripcion-tarjeta-rem: 0.9375rem; /* 15px */
+
+  /* Gap del grid */
+  --grid-gap: 18px; /* 1.125rem */
+
+  /* === NUEVAS PROPORCIONES DEL GRID DE MATERIAS (Layout de imagen) === */
+  /* Usaremos 10 columnas "virtuales" para más precisión */
+  /* Col 1-4: Cálculo (40%) */
+  /* Col 5-6: Física (20% - más angosto) */
+  /* Col 7-10: Matemáticas (40%) */
+  /* Química: Debajo de Física, extendiéndose. Col 5-8 (40%) */
 }

@@ -1,0 +1,540 @@
+/* publico/css/estilos_globales.css */
+@import 'variables.css';
+
+/* --- Estilos Base y Fondo (de tu estilos.css original) --- */
+html {
+  font-size: 100%; /* Asumiendo 1rem = 16px */
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--color-background);
+  color: var(--text-color-light);
+  display: flex; /* Para el layout con sidebar */
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image: url('../imagenes/fondo.png');
+  background-size: contain;
+  background-position: right center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(26, 29, 33, 0.75); /* Overlay más oscuro */
+  z-index: -1;
+}
+
+/* --- MENÚ LATERAL (de tu estilos.css original) --- */
+.menu-lateral {
+  position: fixed;
+  top: 0;
+  left: calc(-1 * var(--ancho-lateral, 14.375rem) + var(--asa-lateral, 4.0625rem)); /* Ajuste para usar variables de variables.css */
+  width: var(--ancho-lateral, 14.375rem);
+  height: 100vh;
+  background: var(--fondo-lateral, #252930);
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 1rem;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  box-shadow: 0.125rem 0 0.375rem rgba(0,0,0,0.2);
+}
+
+.menu-lateral:hover,
+.menu-lateral.menu-abierto-js { /* Para control JS en móvil */
+  left: 0;
+  overflow-y: auto;
+}
+
+.menu-lateral::after { /* Extensor de hover */
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -0.625rem;
+  width: 0.625rem;
+  height: 100%;
+}
+
+.menu-lateral__logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 0 0.5rem;
+  width: 100%;
+}
+
+.menu-lateral__logo-img {
+  width: 2.8125rem;
+  height: auto;
+  margin-bottom: 0.5rem;
+  transition: width 0.3s ease-in-out;
+}
+.menu-lateral:hover .menu-lateral__logo-img,
+.menu-lateral.menu-abierto-js .menu-lateral__logo-img {
+  width: 3.4375rem;
+}
+
+.menu-lateral__logo-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1875rem;
+  font-weight: bold;
+  color: var(--color-tuttor-up-green);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0;
+  max-height: 0;
+  transform: translateY(-0.625rem);
+  overflow: hidden;
+  transition: opacity 0.2s 0.1s ease, max-height 0.2s 0.1s ease, transform 0.2s 0.1s ease;
+}
+.menu-lateral:hover .menu-lateral__logo-text,
+.menu-lateral.menu-abierto-js .menu-lateral__logo-text {
+  opacity: 1;
+  max-height: 5rem;
+  transform: translateY(0);
+}
+
+.menu-lateral__lista {
+  list-style: none;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-lateral__item {
+  margin: 0.125rem 0;
+  width: 100%;
+}
+
+.menu-lateral__enlace {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  outline: none;
+  padding: 0.75rem 0;
+  color: var(--texto-atenuado);
+  transition: background-color 0.15s ease, color 0.15s ease;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+
+.menu-lateral__icono {
+  font-size: var(--tamano-icono-menu-rem, 1.375rem);
+  color: inherit;
+  opacity: 0.75;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  width: var(--asa-lateral, 4.0625rem);
+  min-width: var(--asa-lateral, 4.0625rem);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.menu-lateral__texto {
+  margin-left: 0.75rem;
+  font-size: var(--tamano-texto-menu-rem, 0.9375rem);
+  opacity: 0;
+  max-width: 0;
+  transform: translateX(-0.625rem);
+  overflow: hidden;
+  transition: opacity 0.15s 0.05s ease-out, max-width 0.15s 0.05s ease-out, transform 0.15s 0.05s ease-out, margin-left 0.15s 0.05s ease-out;
+}
+.menu-lateral:hover .menu-lateral__texto,
+.menu-lateral.menu-abierto-js .menu-lateral__texto {
+  opacity: 1;
+  max-width: calc(var(--ancho-lateral) - var(--asa-lateral) - 1rem);
+  transform: translateX(0);
+}
+
+.menu-lateral__enlace--activo,
+.menu-lateral__enlace:hover {
+  background-color: rgba(118, 240, 214, 0.12);
+  color: var(--color-tuttor-up-green);
+}
+.menu-lateral__enlace--activo .menu-lateral__icono,
+.menu-lateral__enlace:hover .menu-lateral__icono {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.submenu-flecha {
+  font-size: 0.8125rem;
+  transition: transform 0.3s ease, opacity 0.2s 0.1s ease-out;
+  margin-left: auto;
+  padding-right: 1.25rem;
+  opacity: 0;
+  transform: translateX(-0.625rem);
+}
+.menu-lateral:hover .submenu-flecha,
+.menu-lateral.menu-abierto-js .submenu-flecha {
+  opacity: 0.6;
+  transform: translateX(0);
+}
+.menu-lateral__enlace:hover .submenu-flecha,
+.menu-lateral__item.has-submenu.submenu-abierto .menu-lateral__enlace .submenu-flecha { /* Asegurar que la flecha se muestre cuando el submenú está activo */
+    opacity: 1;
+}
+.menu-lateral__item.has-submenu.submenu-abierto .menu-lateral__enlace .submenu-flecha {
+  transform: rotate(180deg) translateX(0);
+}
+
+.menu-lateral__submenu {
+  list-style: none;
+  padding-left: var(--asa-lateral);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out, background-color 0.2s ease;
+  background-color: rgba(0,0,0,0.15);
+}
+.menu-lateral__item.has-submenu.submenu-abierto .menu-lateral__submenu {
+  max-height: 30rem; /* Suficiente para varios items */
+  background-color: rgba(0,0,0,0.25);
+}
+.menu-lateral__submenu-enlace {
+  display: flex; align-items: center;
+  padding: 0.5rem 0.75rem 0.5rem 0;
+  font-size: 0.875rem;
+  color: var(--texto-atenuado);
+}
+.menu-lateral__submenu-enlace:hover {
+  color: var(--texto-claro);
+  background-color: rgba(118, 240, 214,0.08);
+}
+.menu-lateral__submenu-icono {
+  margin-right: 0.5rem;
+  font-size: 0.8125rem;
+  width: 1.25em;
+  text-align: center;
+}
+
+/* --- Main Wrapper y Contenido de Página --- */
+.main-wrapper {
+  flex-grow: 1;
+  margin-left: var(--asa-lateral); /* Empieza con el menú colapsado */
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column; /* Para que el footer se quede abajo */
+  min-height: 100vh; /* Para que el footer se quede abajo */
+  position: relative; /* Para que el header sticky funcione correctamente */
+}
+
+.menu-lateral:hover ~ .main-wrapper,
+.menu-lateral.menu-abierto-js ~ .main-wrapper {
+  margin-left: var(--ancho-lateral);
+}
+
+.contenido-pagina-actual {
+  flex-grow: 1; /* Ocupa el espacio restante */
+  padding: 1.25rem;
+  overflow-y: auto; /* Si el contenido de la página es muy largo */
+}
+
+
+/* --- Cabecera / Barra Superior (de tu estilos.css original) --- */
+.header {
+  background-color: var(--color-header-background);
+  padding: 0.75rem 1.25rem;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 500;
+  /* Los márgenes negativos ajustan el padding del .contenido-pagina-actual */
+  margin: -1.25rem -1.25rem 1.25rem -1.25rem; 
+}
+.header .search-bar {
+  display: flex; align-items: center; flex-grow: 1; margin-right: 1rem;
+  max-width: 22rem;
+  background-color: rgba(50, 55, 63, 0.7);
+  border-radius: 1.875rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  height: 2.5rem;
+}
+.header .search-bar input[type="text"] {
+  padding: 0.5rem 1.125rem;
+  font-size: 0.9375rem; background: none; color: var(--text-color-light);
+  flex-grow: 1; height: 100%; border: none; outline: none;
+}
+.header .search-bar input[type="text"]::placeholder { color: var(--text-color-muted); }
+.header .search-bar button {
+  padding: 0 1.125rem;
+  background-color: var(--color-tuttor-up-green); color: var(--text-color-dark);
+  border: none; border-radius: 0 1.875rem 1.875rem 0; cursor: pointer;
+  font-size: 1rem; transition: background-color 0.2s ease; height: 100%;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.header .search-bar button:hover { background-color: #65d8c0; }
+
+.header .right-icons { display: flex; align-items: center; flex-shrink: 0; }
+.header .right-icons .icon-button {
+  background: none; border: none; color: var(--text-color-muted);
+  font-size: 1.375rem; margin-left: 1.25rem;
+  cursor: pointer; transition: color 0.2s ease; padding: 0.25rem;
+  display: flex; align-items: center; text-decoration: none;
+  line-height: 1;
+}
+.header .right-icons .icon-button:hover { color: var(--text-color-light); }
+
+.header .right-icons .ar-button {
+  background-color: var(--color-tuttor-up-green); color: var(--text-color-dark);
+  border-radius: 0.5rem;
+  padding: 0.4375rem 0.875rem;
+  font-size: 1rem; margin-left: 1.25rem; display: flex; align-items: center; text-decoration: none;
+  font-weight: 500;
+}
+.header .right-icons .ar-button:hover { background-color: #65d8c0; }
+.header .right-icons .ar-button i { margin-right: 0.375rem; font-size: 1.125rem; }
+.header .right-icons .ar-text { font-size: 0.9375rem; }
+
+
+/* --- Contenedor y Tarjetas de Materias (de tu estilos.css original) --- */
+.contenedor-materias {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: auto auto;
+  gap: var(--grid-gap, 1rem);
+  margin-top: 1.5rem; /* Reducido un poco porque el header ya da espacio */
+  max-width: 68rem;
+  margin-left: auto; margin-right: auto;
+  position: relative; z-index: 2; /* Asegurar que esté sobre el fondo */
+}
+
+.materia-card.calculo { grid-column: 1 / span 2; grid-row: 1 / span 2; }
+.materia-card.fisica { grid-column: 3 / span 1; grid-row: 1 / 2; }
+.materia-card.matematica, .materia-card.matematicas { grid-column: 4 / span 2; grid-row: 1 / 2; } /* Añadido .matematicas */
+.materia-card.quimica { grid-column: 3 / span 2; grid-row: 2 / 3; }
+/* Clases para otras materias si siguen un layout específico (si no, se acomodarán solas) */
+.materia-card.logica { /* Ejemplo: podrías definir un área o dejar que fluya */ }
+
+
+.materia-card {
+  text-decoration: none;
+  padding: 1.25rem;
+  border-radius: 0.625rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  box-shadow: 0 0.125rem 0.5rem rgba(0,0,0,0.2);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  color: var(--text-color-light);
+  min-height: 10rem;
+}
+.materia-card:hover {
+  transform: translateY(-0.1875rem) scale(1.01);
+  box-shadow: 0 0.375rem 1rem rgba(0,0,0,0.25);
+}
+
+.materia-card.calculo { background-color: var(--color-calculo); }
+.materia-card.fisica { background-color: var(--color-fisica); }
+.materia-card.matematica, .materia-card.matematicas { background-color: var(--color-matematicas); }
+.materia-card.quimica { background-color: var(--color-quimica); }
+/* Añadir colores para nuevas materias usando sus variables de color si existen, o un color genérico */
+.materia-card.logica { background-color: #e74c3c; }
+.materia-card.fisicaavanzada { background-color: #2e856e; }
+.materia-card.calculoavanzado { background-color: #4dc9b7; }
+.materia-card.matematicasindustriales { background-color: #3acad8; }
+.materia-card.cienciasambientales { background-color: #48b8c2; }
+
+
+.materia-content { display: flex; flex-direction: column; width: 100%; flex-grow: 1; justify-content: space-between; }
+.materia-info { display: flex; flex-direction: column; justify-content: flex-end; flex-grow: 1; width: 100%; }
+
+.materia-image-placeholder {
+  font-size: var(--tamano-icono-tarjeta-media-rem);
+  margin-bottom: 0.75rem;
+  color: inherit;
+  align-self: flex-start;
+}
+.materia-card.calculo .materia-image-placeholder { font-size: var(--tamano-icono-tarjeta-grande-rem); }
+
+.materia-codigo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: var(--tamano-codigo-fismat-rem); /* Usar fismat como base para Química también */
+  font-weight: 700;
+  line-height: var(--line-height-codigo-fismat); /* Usar fismat como base */
+  text-transform: uppercase; color: inherit; flex-shrink: 0; text-align: left;
+}
+.materia-card.quimica .materia-codigo { /* Si necesitas un tamaño específico para Química */
+    font-size: var(--tamano-codigo-quimica-rem);
+    line-height: var(--line-height-codigo-quimica);
+}
+.materia-card.calculo .materia-codigo {
+  font-size: var(--tamano-codigo-calculo-rem);
+  line-height: var(--line-height-codigo-calculo);
+}
+.materia-card.matematica .materia-codigo, .materia-card.matematicas .materia-codigo {
+  font-size: calc(var(--tamano-codigo-fismat-rem) * 1.1); /* Un poco más grande para Matemáticas */
+}
+
+
+.materia-descripcion {
+  font-family: 'Poppins', sans-serif;
+  font-size: var(--tamano-descripcion-tarjeta-rem);
+  color: inherit; opacity: 0.8;
+  text-align: left; width: 100%;
+  margin-top: 0.5rem;
+}
+
+/* --- Footer --- */
+.footer-principal {
+    background-color: var(--color-menu-background);
+    color: var(--text-color-muted);
+    padding: 1rem 1.25rem;
+    text-align: center;
+    font-size: 0.875rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    margin-top: auto; /* Esto ayuda a empujarlo hacia abajo en el flex container .main-wrapper */
+}
+.footer-principal a {
+    color: var(--color-tuttor-up-green);
+    text-decoration: none;
+}
+.footer-principal a:hover {
+    text-decoration: underline;
+}
+
+/* --- Responsive Design (de tu estilos.css original, adaptado) --- */
+/* Botón de menú móvil (Hamburguesa) */
+.boton-menu-movil {
+    display: none; /* Oculto por defecto en escritorio */
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1001; /* Encima del menú lateral cuando está cerrado */
+    background-color: var(--color-tuttor-up-green);
+    color: var(--text-color-dark);
+    border: none;
+    padding: 0.5rem 0.7rem;
+    font-size: 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+@media (max-width: 768px) { /* Approx 48rem */
+    .boton-menu-movil {
+        display: block;
+    }
+
+    /* Cuando el menú está cerrado en móvil, está totalmente oculto */
+    .menu-lateral {
+        left: calc(-1 * var(--ancho-lateral)); 
+    }
+    /* Cuando se abre con JS, se muestra */
+    .menu-lateral.menu-abierto-js {
+        left: 0;
+        box-shadow: 5px 0 15px rgba(0,0,0,0.2); /* Sombra más pronunciada en móvil */
+    }
+
+    .main-wrapper {
+        margin-left: 0; /* El contenido principal ocupa todo el ancho */
+        transition: none; /* No hay transición de margen en móvil */
+    }
+    /* No se empuja el contenido cuando el menú está abierto en móvil */
+    .menu-lateral.menu-abierto-js ~ .main-wrapper {
+      margin-left: 0;
+    }
+    
+    .contenido-pagina-actual {
+        padding: 0.75rem; /* Menos padding en móvil */
+        padding-top: 4.5rem; /* Espacio para el header sticky y el botón de menú */
+    }
+
+    .header {
+        padding: 0.625rem 0.75rem;
+        /* El margin negativo debe ajustarse al nuevo padding de .contenido-pagina-actual */
+        margin: -0.75rem -0.75rem 0.75rem -0.75rem; 
+        /* Si .contenido-pagina-actual tiene padding-top, el header puede no necesitar margen negativo superior */
+        /* Revisa esto según cómo se vea el header en móvil con el padding-top del contenido */
+    }
+    .header .search-bar {
+        margin-right: 0.5rem; height: 2.25rem; max-width: calc(100% - 8rem);
+    }
+    .header .right-icons .icon-button { margin-left: 0.625rem; font-size: 1.25rem; }
+    .header .right-icons .ar-button { margin-left: 0.625rem; padding: 0.375rem 0.625rem; }
+
+
+    .contenedor-materias {
+        grid-template-columns: 1fr 1fr; /* Dos columnas */
+        gap: 0.75rem;
+        margin-top: 1.25rem;
+        padding: 0 0.5rem; /* Un poco de padding lateral para las tarjetas */
+    }
+    .materia-card.calculo { grid-column: 1 / span 2; grid-row: auto; }
+    .materia-card.fisica { grid-column: 1 / span 1; grid-row: auto; }
+    .materia-card.matematica, .materia-card.matematicas { grid-column: 2 / span 1; grid-row: auto; }
+    .materia-card.quimica { grid-column: 1 / span 2; grid-row: auto; }
+    /* Otras materias se adaptarán a 2 columnas */
+    .materia-card.logica, 
+    .materia-card.fisicaavanzada, 
+    .materia-card.calculoavanzado, 
+    .materia-card.matematicasindustriales, 
+    .materia-card.cienciasambientales {
+        grid-column: span 1; /* Ocupa una columna */
+    }
+    /* Si quedan impares, la última ocupará todo el ancho si no se especifica */
+    .contenedor-materias .materia-card:last-child:nth-child(odd) {
+       /* grid-column: 1 / span 2; /* Para que la última impar ocupe todo el ancho */
+    }
+
+
+    .materia-card { min-height: 9rem; padding: 0.75rem; }
+    .materia-image-placeholder { font-size: calc(var(--tamano-icono-tarjeta-media-rem) * 0.7); }
+    .materia-card.calculo .materia-image-placeholder { font-size: calc(var(--tamano-icono-tarjeta-grande-rem) * 0.6); }
+    
+    .materia-codigo { font-size: calc(var(--tamano-codigo-fismat-rem) * 0.7); line-height: 1; }
+    .materia-card.calculo .materia-codigo { font-size: calc(var(--tamano-codigo-calculo-rem) * 0.5); line-height: 0.9; }
+    .materia-card.quimica .materia-codigo { font-size: calc(var(--tamano-codigo-quimica-rem) * 0.7); }
+
+    .materia-descripcion { font-size: calc(var(--tamano-descripcion-tarjeta-rem) * 0.9); }
+}
+
+@media (max-width: 576px) { /* Móvil pequeño */
+    .header .search-bar { max-width: calc(100% - 6rem); }
+    .header .right-icons .ar-text { display: none; } /* Ocultar texto AR */
+    .header .right-icons .ar-button { padding: 0.375rem 0.5rem; }
+    .header .right-icons .ar-button i { margin-right: 0; }
+
+
+    .contenedor-materias {
+      grid-template-columns: 1fr; /* Una columna */
+    }
+    .materia-card.calculo,
+    .materia-card.fisica,
+    .materia-card.matematica, .materia-card.matematicas,
+    .materia-card.quimica,
+    .materia-card.logica, 
+    .materia-card.fisicaavanzada, 
+    .materia-card.calculoavanzado, 
+    .materia-card.matematicasindustriales, 
+    .materia-card.cienciasambientales {
+        grid-column: 1 / span 1 !important; /* Forzar una columna */
+    }
+
+    .materia-codigo { font-size: calc(var(--tamano-codigo-fismat-rem) * 0.8); }
+    .materia-card.calculo .materia-codigo { font-size: calc(var(--tamano-codigo-calculo-rem) * 0.55); }
+    .materia-card.quimica .materia-codigo { font-size: calc(var(--tamano-codigo-quimica-rem) * 0.8); }
+}

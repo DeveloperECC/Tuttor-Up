@@ -1,0 +1,34 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase / # Si tu proyecto está en la raíz del servidor (ej. localhost/)
+                  # Si está en un subdirectorio (ej. localhost/TUTORUP/), usa:
+                  # RewriteBase /TUTORUP/publico/ (o el path correcto a tu carpeta publico)
+                  # Ajusta esto según cómo accedas a tu proyecto.
+                  # Si accedes como localhost/TUTORUP/, y el primer .htaccess redirige a publico,
+                  # RewriteBase debería ser la ruta al directorio 'publico' desde la raíz del servidor.
+                  # Por ejemplo, si tu proyecto es localhost/mi_proyecto/
+                  # y la URL final es localhost/mi_proyecto/materias (manejado por publico/index.php)
+                  # entonces RewriteBase sería /mi_proyecto/
+
+    # Si la URL es localhost/TUTORUP/publico/ y quieres que BASE_URL sea localhost/TUTORUP
+    # y el .htaccess de arriba está en TUTORUP/
+    # Entonces este RewriteBase debería ser el path desde la raíz del host HASTA publico.
+    # Si accedes a localhost/TUTORUP/ (y el .htaccess de la raíz te lleva a publico/)
+    # RewriteBase /TUTORUP/publico/ es una opción.
+
+    # Asumiendo que el DocumentRoot es TUTORUP/publico o que el .htaccess anterior
+    # ya gestionó la entrada a la carpeta 'publico'.
+    # Si accedes por ejemplo a localhost/TUTORUP/materias (y quieres que lo maneje publico/index.php)
+    # y tu proyecto está en una carpeta TUTORUP en el servidor web:
+    # RewriteBase /TUTORUP/ # Asumiendo que el index.php está en publico/
+    
+    # La opción más simple suele ser configurar el DocumentRoot del servidor virtual a TUTORUP/publico
+    # y entonces el RewriteBase puede ser simplemente /
+
+    # Para este ejemplo, asumimos que tu servidor está configurado para que
+    # las peticiones a / (o /TUTORUP/ si está en subdirectorio) lleguen a publico/index.php
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php?$1 [L,QSA]
+</IfModule>

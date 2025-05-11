@@ -1,0 +1,232 @@
+/* publico/css/estilos_materias.css */
+@import 'variables.css'; /* Importa las variables globales/actualizadas */
+
+/* --- Estilos Base y Fondo --- (Sin cambios) */
+html { font-size: 100%; box-sizing: border-box; scroll-behavior: smooth; }
+*, *::before, *::after { box-sizing: inherit; }
+body { /* Estos estilos de body podrían ir a un estilos_comunes.css si ambas secciones lo comparten */
+  margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--color-background);
+  color: var(--text-color-light); display: flex; min-height: 100vh; overflow-x: hidden;
+  background-image: url('../imagenes/fondo.png'); background-size: contain;
+  background-position: right center; background-repeat: no-repeat; background-attachment: fixed;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+}
+body::before {
+  content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background-color: rgba(26, 29, 33, 0.75); z-index: -1;
+}
+
+/* --- MENÚ LATERAL (Sección Materias - Ajustado) --- */
+.menu-lateral { /* Esta clase se usará para el menú principal de la app */
+  position: fixed; top: 0;
+  left: calc(-1 * var(--ancho-lateral) + var(--asa-lateral));
+  width: var(--ancho-lateral);
+  height: 100vh;
+  background: var(--fondo-lateral);
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+  display: flex; flex-direction: column; align-items: center;
+  padding-top: 1.25rem; /* Más espacio arriba */
+  overflow-x: hidden;
+  overflow-y: hidden; /* Ocultar scrollbar hasta hover */
+  box-shadow: 0.125rem 0 0.5rem rgba(0,0,0,0.25);
+}
+.menu-lateral:hover, .menu-lateral.menu-abierto-js {
+  left: 0; overflow-y: auto;
+}
+.menu-lateral::after { /* Estabilizador de hover */
+  content: ''; position: absolute; top: 0; right: -0.75rem; /* 12px */
+  width: 0.75rem; height: 100%;
+}
+
+.menu-lateral__logo-container {
+  /* ... (como en la respuesta anterior, usando variables de tamaño si es necesario) ... */
+  display: flex; flex-direction: column; align-items: center;
+  margin-bottom: 1.875rem; /* 30px */ padding: 0 0.5rem; width: 100%;
+}
+.menu-lateral__logo-img {
+  width: 3.125rem; /* 50px */ height: auto; margin-bottom: 0.625rem; /* 10px */
+  transition: width 0.3s ease-in-out;
+}
+.menu-lateral:hover .menu-lateral__logo-img,
+.menu-lateral.menu-abierto-js .menu-lateral__logo-img {
+    width: 3.75rem; /* 60px */
+}
+/* ... (estilos de .menu-lateral__logo-text, __lista, __item, __enlace sin cambios mayores) ... */
+.menu-lateral__logo-text { font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; font-weight: bold; color: var(--color-tuttor-up-green); text-transform: uppercase; letter-spacing: 0.05em; opacity: 0; max-height: 0; transform: translateY(-10px); overflow: hidden; transition: opacity 0.2s 0.15s ease, max-height 0.2s 0.15s ease, transform 0.2s 0.15s ease; }
+.menu-lateral:hover .menu-lateral__logo-text, .menu-lateral.menu-abierto-js .menu-lateral__logo-text { opacity: 1; max-height: 5rem; transform: translateY(0); }
+.menu-lateral__lista { list-style: none; width: 100%; display: flex; flex-direction: column; align-items: stretch; padding: 0; margin: 0; }
+.menu-lateral__item { margin: 0.125rem 0; width: 100%; }
+.menu-lateral__enlace { display: flex; align-items: center; text-decoration: none; outline: none; padding: 0.875rem 0; color: var(--texto-atenuado); transition: background-color 0.15s ease, color 0.15s ease; overflow: hidden; white-space: nowrap; position: relative; }
+
+
+.menu-lateral__icono {
+  font-size: var(--tamano-icono-menu-rem);
+  opacity: 0.8;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  width: var(--asa-lateral);
+  min-width: var(--asa-lateral);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  /* Ajuste para centrar mejor el icono cuando el menú está colapsado */
+  padding-left: 0.125rem; /* Pequeño ajuste si es necesario */
+}
+
+.menu-lateral__texto {
+  margin-left: 0.875rem; /* 14px, un poco más de espacio */
+  font-size: var(--tamano-texto-menu-rem);
+  opacity: 0; max-width: 0; transform: translateX(-0.625rem);
+  overflow: hidden;
+  transition: opacity 0.15s 0.08s ease-out, max-width 0.15s 0.08s ease-out, transform 0.15s 0.08s ease-out, margin-left 0.15s 0.08s ease-out;
+}
+.menu-lateral:hover .menu-lateral__texto,
+.menu-lateral.menu-abierto-js .menu-lateral__texto {
+  opacity: 1;
+  max-width: calc(var(--ancho-lateral) - var(--asa-lateral) - 1.25rem); /* Ajusta el cálculo */
+  transform: translateX(0);
+}
+/* ... (estilos de .menu-lateral__enlace--activo, :hover, submenús sin cambios mayores) ... */
+.menu-lateral__enlace--activo, .menu-lateral__enlace:hover { background-color: rgba(118, 240, 214, 0.12); color: var(--color-tuttor-up-green); }
+.menu-lateral__enlace--activo .menu-lateral__icono, .menu-lateral__enlace:hover .menu-lateral__icono { opacity: 1; transform: scale(1.1); }
+.menu-lateral__item.has-submenu .menu-lateral__enlace { justify-content: flex-start; }
+.submenu-flecha { font-size: 0.8125rem; transition: transform 0.3s ease, opacity 0.2s 0.1s ease-out; margin-left: auto; padding-right: 1.25rem; opacity: 0; transform: translateX(-0.625rem); }
+.menu-lateral:hover .submenu-flecha, .menu-lateral.menu-abierto-js .submenu-flecha { opacity: 0.6; transform: translateX(0); }
+.menu-lateral__enlace:hover .submenu-flecha, .menu-lateral__item.has-submenu.submenu-abierto .submenu-flecha { opacity: 1; }
+.menu-lateral__item.has-submenu.submenu-abierto .submenu-flecha { transform: rotate(180deg) translateX(0); }
+.menu-lateral__submenu { list-style: none; padding-left: var(--asa-lateral); max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, background-color 0.2s ease; background-color: rgba(0,0,0,0.15); }
+.menu-lateral__item.has-submenu.submenu-abierto .menu-lateral__submenu { max-height: 30rem; background-color: rgba(0,0,0,0.25); }
+.menu-lateral__submenu-enlace { display: flex; align-items: center; padding: 0.5rem 0.75rem 0.5rem 0; font-size: 0.875rem; color: var(--texto-atenuado); }
+.menu-lateral__submenu-enlace:hover { color: var(--texto-claro); background-color: rgba(118, 240, 214,0.08); }
+.menu-lateral__submenu-icono { margin-right: 0.5rem; font-size: 0.8125rem; width: 1.25em; text-align: center; }
+
+
+/* --- Contenido Principal --- (Sin cambios) */
+.contenido-principal {
+  flex-grow: 1; padding: 1.25rem; position: relative; z-index: 1; overflow-y: auto;
+  margin-left: var(--asa-lateral);
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.menu-lateral:hover ~ .contenido-principal,
+.menu-lateral.menu-abierto-js ~ .contenido-principal {
+  margin-left: var(--ancho-lateral);
+}
+
+/* --- Cabecera / Barra Superior (Sección Materias) --- */
+/* Los estilos del .header y sus hijos que me diste para la sección materias se mantienen */
+.header { background-color: var(--color-header-background); padding: 0.75rem 1.25rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 500; margin: -1.25rem -1.25rem 1.25rem -1.25rem; }
+.header .search-bar { display: flex; align-items: center; flex-grow: 1; margin-right: 1rem; max-width: 22rem; background-color: rgba(50, 55, 63, 0.7); border-radius: 1.875rem; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.15); height: 2.5rem; }
+.header .search-bar input[type="text"] { padding: 0.5rem 1.125rem; font-size: 0.9375rem; background: none; color: var(--text-color-light); flex-grow: 1; height: 100%; border: none; outline: none; }
+.header .search-bar input[type="text"]::placeholder { color: var(--text-color-muted); }
+.header .search-bar button { padding: 0 1.125rem; background-color: var(--color-tuttor-up-green); color: var(--text-color-dark); border: none; border-radius: 0 1.875rem 1.875rem 0; cursor: pointer; font-size: 1rem; transition: background-color 0.2s ease; height: 100%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.header .search-bar button:hover { background-color: #65d8c0; }
+.header .right-icons { display: flex; align-items: center; flex-shrink: 0; }
+.header .right-icons .icon-button { background: none; border: none; color: var(--text-color-muted); font-size: 1.375rem; margin-left: 1.25rem; cursor: pointer; transition: color 0.2s ease; padding: 0.25rem; display: flex; align-items: center; text-decoration: none; line-height: 1; }
+.header .right-icons .icon-button:hover { color: var(--text-color-light); }
+.header .right-icons .ar-button { background-color: var(--color-tuttor-up-green); color: var(--text-color-dark); border-radius: 0.5rem; padding: 0.4375rem 0.875rem; font-size: 1rem; margin-left: 1.25rem; display: flex; align-items: center; text-decoration: none; font-weight: 500; }
+.header .right-icons .ar-button:hover { background-color: #65d8c0; }
+.header .right-icons .ar-button i { margin-right: 0.375rem; font-size: 1.125rem; }
+.header .right-icons .ar-text { font-size: 0.9375rem; }
+
+
+/* --- Contenedor y Tarjetas de Materias (GRID LAYOUT AJUSTADO A IMAGEN) --- */
+.contenedor-materias {
+  display: grid;
+  /* Usaremos 10 columnas virtuales para mayor precisión en el layout de la imagen */
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: auto auto; /* Dos filas principales */
+  gap: var(--grid-gap, 1rem);
+  margin-top: 2.5rem;
+  max-width: 70rem; /* 1120px, más ancho para el layout */
+  margin-left: auto; margin-right: auto;
+  position: relative; z-index: 2;
+}
+
+/* Asignación de áreas para el layout de la imagen:
+   Cálculo:     Col 1-4 (40% del ancho), Filas 1-2
+   Física:      Col 5-6 (20% del ancho, más angosto), Fila 1
+   Matemáticas: Col 7-10 (40% del ancho), Fila 1
+   Química:     Col 5-8 (debajo de Física, extendiéndose para ser tan ancha como Matemáticas), Fila 2
+*/
+.materia-card.calculo {
+  grid-column: 1 / span 4;
+  grid-row: 1 / span 2;
+}
+.materia-card.fisica {
+  grid-column: 5 / span 2; /* Física un poco más angosta */
+  grid-row: 1 / 2;
+}
+.materia-card.matematica {
+  grid-column: 7 / span 4;
+  grid-row: 1 / 2; /* Misma fila que Física */
+}
+.materia-card.quimica {
+  grid-column: 5 / span 4; /* Comienza en la columna de Física y abarca 4 columnas (igual que Matemáticas) */
+  grid-row: 2 / 3;
+}
+
+/* ... (Estilos generales de .materia-card, colores, y contenido interno como en la respuesta anterior,
+         asegurándose de que usan las variables de tamaño actualizadas de variables.css) ... */
+.materia-card { text-decoration: none; padding: 1.5rem; border-radius: 0.75rem; display: flex; flex-direction: column; transition: transform 0.25s ease, box-shadow 0.25s ease; box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.25); position: relative; overflow: hidden; width: 100%; color: var(--text-color-light); min-height: 10rem; }
+.materia-card:hover { transform: translateY(-0.25rem) scale(1.015); box-shadow: 0 0.5rem 1.25rem rgba(0,0,0,0.3); }
+.materia-card.calculo { background-color: var(--color-calculo); }
+.materia-card.fisica { background-color: var(--color-fisica); }
+.materia-card.matematica { background-color: var(--color-matematicas); }
+.materia-card.quimica { background-color: var(--color-quimica); }
+.materia-content { display: flex; flex-direction: column; width: 100%; flex-grow: 1; justify-content: space-between; }
+.materia-info { display: flex; flex-direction: column; justify-content: flex-end; flex-grow: 1; width: 100%; }
+.materia-image-placeholder { font-size: var(--tamano-icono-tarjeta-media-rem); margin-bottom: auto; color: inherit; align-self: flex-start; padding-bottom: 0.5rem; }
+.materia-card.calculo .materia-image-placeholder { font-size: var(--tamano-icono-tarjeta-grande-rem); }
+.materia-card.quimica .materia-image-placeholder { font-size: var(--tamano-icono-tarjeta-quimica-rem); }
+.materia-codigo { font-family: 'Space Grotesk', sans-serif; font-size: var(--tamano-codigo-fismat-rem); font-weight: 700; line-height: var(--line-height-codigo-fismat); text-transform: uppercase; color: inherit; flex-shrink: 0; text-align: left; }
+.materia-card.calculo .materia-codigo { font-size: var(--tamano-codigo-calculo-rem); line-height: var(--line-height-codigo-calculo); }
+.materia-card.quimica .materia-codigo { font-size: var(--tamano-codigo-quimica-rem); line-height: var(--line-height-codigo-quimica); }
+.materia-descripcion { font-family: 'Poppins', sans-serif; font-size: var(--tamano-descripcion-tarjeta-rem); color: inherit; opacity: 0.85; text-align: left; width: 100%; margin-top: 0.75rem; }
+
+
+/* --- Responsive Design --- */
+@media (max-width: 64rem) { /* ~1024px, para tablets */
+    .contenedor-materias {
+        grid-template-columns: repeat(4, 1fr); /* Ajustar a 4 columnas virtuales */
+        max-width: 90%;
+        gap: 0.875rem;
+    }
+    .materia-card.calculo { grid-column: 1 / span 2; grid-row: 1 / span 2; }
+    .materia-card.fisica { grid-column: 3 / span 1; grid-row: 1 / 2; }
+    .materia-card.matematica { grid-column: 4 / span 1; grid-row: 1 / 2; }
+    .materia-card.quimica { grid-column: 3 / span 2; grid-row: 2 / 3; }
+
+    /* Reducir tamaños de fuente ligeramente para tablet */
+    .materia-image-placeholder { font-size: calc(var(--tamano-icono-tarjeta-media-rem) * 0.9); }
+    .materia-card.calculo .materia-image-placeholder { font-size: calc(var(--tamano-icono-tarjeta-grande-rem) * 0.9); }
+    .materia-codigo { font-size: calc(var(--tamano-codigo-fismat-rem) * 0.9); }
+    .materia-card.calculo .materia-codigo { font-size: calc(var(--tamano-codigo-calculo-rem) * 0.9); }
+}
+
+@media (max-width: 48rem) { /* 768px, móvil */
+  /* ... (Estilos de body, menú, header para móvil como en la respuesta anterior) ... */
+  .contenido-principal { padding-top: 5rem; } /* Más espacio para header */
+
+  .contenedor-materias {
+    grid-template-columns: 1fr 1fr; /* Dos columnas */
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+  /* Todas las tarjetas ocupan 1 celda en el nuevo grid de 2 columnas */
+  .materia-card.calculo { grid-column: 1 / span 2; grid-row: auto; } /* Cálculo ancho completo arriba */
+  .materia-card.fisica { grid-column: 1 / span 1; grid-row: auto; }
+  .materia-card.matematica { grid-column: 2 / span 1; grid-row: auto; }
+  .materia-card.quimica { grid-column: 1 / span 2; grid-row: auto; } /* Química ancho completo debajo */
+
+  .materia-card { min-height: 9rem; padding: 1rem; }
+  /* ... (resto de ajustes de tamaño de fuentes para móvil como en la respuesta anterior) ... */
+}
+
+@media (max-width: 36rem) { /* Móvil pequeño, una columna */
+    .contenedor-materias { grid-template-columns: 1fr; }
+    .materia-card.calculo, .materia-card.fisica,
+    .materia-card.matematica, .materia-card.quimica {
+        grid-column: 1 / span 1 !important;
+    }
+}
