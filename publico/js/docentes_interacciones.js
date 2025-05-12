@@ -1,6 +1,23 @@
 // publico/js/docentes_interacciones.js
 document.addEventListener('DOMContentLoaded', () => {
     // Asegúrate que teachersDataFromPHP está disponible (inyectado desde la vista PHP)
+     function aplicarFiltrosInicialesPHP() {
+    
+    if (typeof materiaFiltradaDesdePHP !== 'undefined' && materiaFiltradaDesdePHP) {
+            filterMateriaCheckboxes.forEach(checkbox => {
+                if (checkbox.value.toLowerCase() === materiaFiltradaDesdePHP.toLowerCase()) {
+                    checkbox.checked = true;
+                } else {
+                    checkbox.checked = false; // Para asegurar que solo el filtrado esté activo si vino de PHP
+                }
+            });
+        }
+
+        renderCards(getFilteredTeachers()); // Renderiza basado en el estado actual de los filtros
+        updateSubjectTitle();         // Actualiza el título basado en el estado actual de los filtros
+        updatePaginationButtons(getFilteredTeachers()); // Actualiza paginación
+    }
+
     if (typeof teachersDataFromPHP === 'undefined') {
         console.error('teachersDataFromPHP no está definido. Asegúrate de pasarlo desde PHP.');
         return;

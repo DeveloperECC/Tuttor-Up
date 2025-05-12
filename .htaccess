@@ -1,8 +1,0 @@
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-
-    # Redirige todas las solicitudes a la carpeta publico/
-    # excepto si ya se está solicitando un archivo dentro de publico/
-    RewriteCond %{REQUEST_URI} !^/publico/
-    RewriteRule ^(.*)$ publico/$1 [L]
-</IfModule>

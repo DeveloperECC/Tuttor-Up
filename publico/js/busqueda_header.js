@@ -34,8 +34,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     notificationsButton?.addEventListener('click', () => alert('Funcionalidad de Notificaciones (Pendiente)'));
     userProfileButton?.addEventListener('click', () => alert('Funcionalidad de Perfil de Usuario (Pendiente)'));
-    arButton?.addEventListener('click', (e) => {
+    arButton?.addEventListener('click', (e) => { window.location.href = `${BASE_URL}/notificaciones`; });
         e.preventDefault();
         alert('Funcionalidad de Realidad Aumentada (Pendiente)');
     });
+    userProfileButton?.addEventListener('click', () => {
+    // Ejemplo: Redirigir a la página de perfil del usuario
+    window.location.href = `${BASE_URL}/perfil`; // <--- CAMBIA ESTO SI QUIERES REDIRIGIR
+    // alert('Funcionalidad de Perfil de Usuario (Pendiente)');
 });

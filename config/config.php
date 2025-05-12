@@ -1,41 +1,32 @@
 <?php
 // TUTORUP/config/config.php
 
-// Define la ruta raíz del proyecto (un nivel arriba de 'config')
+// Define la ruta raíz del proyecto (un nivel arriba de 'config', es decir, TUTORUP/)
 define('ROOT_PATH', dirname(__DIR__));
 
-// Define la URL base del proyecto
+// --- Cálculo de BASE_URL y ASSETS_URL ---
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-$host = $_SERVER['HTTP_HOST'];
+$host = $_SERVER['HTTP_HOST']; // Esto será 'localhost:8888'
 
-// Asumiendo que el DocumentRoot de tu servidor apunta a TUTORUP/publico/
-// Si no, necesitarás ajustar $script_name_base
-// Ejemplo: Si TUTORUP está en localhost/TUTORUP/, y accedes a /TUTORUP/publico/index.php
-// dirname($_SERVER['SCRIPT_NAME']) sería /TUTORUP/publico
-// y si quieres que BASE_URL sea http://localhost/TUTORUP, debes quitar /publico.
+// El subdirectorio donde reside tu proyecto, relativo a la raíz del host.
+// En tu caso, es '/Tuttor-Up'.
+$project_base_path = '/Tuttor-Up';
 
-$script_name_path = dirname($_SERVER['TUTTOR-UP/publico']);
-// Si script_name_path termina con /publico (o \publico en Windows), lo quitamos.
-if (substr($script_name_path, -7) === '/publico' || substr($script_name_path, -7) === '\\publico') {
-    $base_dir = substr($script_name_path, 0, -7);
-} else {
-    // Si el DocumentRoot ya es /publico, dirname($_SERVER['SCRIPT_NAME']) podría ser solo '/' o el nombre del subdirectorio
-    // donde está publico si no es la raíz del host.
-    // Esta parte es la más dependiente de tu configuración de servidor.
-    // Para el caso donde DocumentRoot es publico/ y el proyecto está en la raíz del host:
-    // $base_dir = '';
-    // Si el proyecto está en localhost/TUTORUP/ y DocumentRoot es TUTORUP/publico/:
-    // $base_dir = '/TUTORUP';
-    // Vamos a asumir un caso común donde el proyecto está en un subdirectorio
-    // y el DocumentRoot es la carpeta padre de 'publico'.
-    $base_dir = $script_name_path == '/' ? '' : $script_name_path; // Simplificación, ajustar si es necesario
-}
-// Asegurar que no termine con / si no es la raíz
-$base_dir = rtrim($base_dir, '/');
+// BASE_URL apunta a la carpeta 'publico' dentro de tu proyecto, ya que ahí está el router.
+define('BASE_URL', rtrim($protocol . $host . $project_base_path . '/publico', '/'));
 
+// ASSETS_URL también apunta a la carpeta 'publico', ya que tus assets están ahí.
+define('ASSETS_URL', BASE_URL);
 
-define('BASE_URL', $protocol . $host . $base_dir);
-define('ASSETS_URL', BASE_URL . '/publico'); // Los assets están dentro de publico
+// --- Depuración de Rutas (opcional, puedes comentar esto después) ---
+// echo "DEBUG config.php:<br>";
+// echo "Protocol: " . htmlspecialchars($protocol) . "<br>";
+// echo "Host: " . htmlspecialchars($host) . "<br>";
+// echo "Project Base Path: " . htmlspecialchars($project_base_path) . "<br>";
+// echo "BASE_URL: " . htmlspecialchars(BASE_URL) . "<br>";
+// echo "ASSETS_URL: " . htmlspecialchars(ASSETS_URL) . "<br>";
+// echo "ROOT_PATH: " . htmlspecialchars(ROOT_PATH) . "<br><hr>";
+// --- Fin Depuración ---
 
 // Habilitar muestra de errores para desarrollo
 ini_set('display_errors', 1);

@@ -83,6 +83,11 @@ $docentes = $datos_vista['docentes'] ?? [];
     </div>
 </div>
 
+<script>
+    const teachersDataFromPHP = <?= json_encode($datos_vista['docentes'] ?? []) ?>;
+    // Asegúrate de que $datos_vista['materia_filtrada'] se define en el controlador
+    const materiaFiltradaDesdePHP = <?= isset($datos_vista['materia_filtrada']) ? json_encode($datos_vista['materia_filtrada']) : 'null' ?>;
+</script>
 
 <!-- Modal de Horarios (inicialmente oculto) -->
 <div id="horarioModalDocentes" class="modal-horarios">

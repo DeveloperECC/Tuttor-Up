@@ -209,10 +209,13 @@ body::before {
   .contenido-principal { padding-top: 5rem; } /* Más espacio para header */
 
   .contenedor-materias {
-    grid-template-columns: 1fr 1fr; /* Dos columnas */
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-  }
+    grid-template-columns: repeat(4, 1fr); /* Mantenemos el grid de 4 col virtuales de la tablet */
+    /* ... */
+}
+.materia-card.calculo { grid-column: 1 / span 2; grid-row: auto; }
+.materia-card.fisica { grid-column: 3 / span 2; grid-row: auto; } /* Física ocupa 2 ahora */
+.materia-card.matematicas { grid-column: 1 / span 2; grid-row: auto; } /* Matemáticas debajo de Cálculo */
+.materia-card.quimica { grid-column: 3 / span 2; grid-row: auto; } /* Química debajo de Física */
   /* Todas las tarjetas ocupan 1 celda en el nuevo grid de 2 columnas */
   .materia-card.calculo { grid-column: 1 / span 2; grid-row: auto; } /* Cálculo ancho completo arriba */
   .materia-card.fisica { grid-column: 1 / span 1; grid-row: auto; }

@@ -11,7 +11,7 @@
                 </a>
             </li>
             <li class="menu-lateral__item has-submenu <?= ($controlador_actual ?? '') === 'ControladorMaterias' ? 'submenu-abierto' : '' ?>">
-                <a href="<?= BASE_URL ?>/materias/mostrar" class="menu-lateral__enlace <?= ($controlador_actual ?? '') === 'ControladorMaterias' ? 'menu-lateral__enlace--activo' : '' ?>">
+                <a href="<?= BASE_URL ?>/materias" class="menu-lateral__enlace <?= ($controlador_actual ?? '') === 'ControladorMaterias' ? 'menu-lateral__enlace--activo' : '' ?>">
                     <i class="fas fa-book menu-lateral__icono"></i><span class="menu-lateral__texto">Materias</span>
                     <i class="fas fa-chevron-down submenu-flecha"></i>
                 </a>
@@ -22,6 +22,16 @@
                     <li><a href="<?= BASE_URL ?>/materias/quimica" class="menu-lateral__submenu-enlace"><i class="fas fa-flask menu-lateral__submenu-icono"></i> Química</a></li>
                     <li><a href="<?= BASE_URL ?>/materias/logica" class="menu-lateral__submenu-enlace"><i class="fas fa-brain menu-lateral__submenu-icono"></i> Lógica</a></li>
                     <!-- Añadir más materias si tienen rutas directas -->
+                </ul>
+                              
+                <ul class="menu-lateral__submenu">
+                    <li><a href="<?= BASE_URL ?>/docentes/filtrarPorMateria/calculo" class="menu-lateral__submenu-enlace"><i class="fas fa-square-root-alt menu-lateral__submenu-icono"></i> Cálculo</a></li>
+                    <li><a href="<?= BASE_URL ?>/docentes/filtrarPorMateria/fisica" class="menu-lateral__submenu-enlace"><i class="fas fa-atom menu-lateral__submenu-icono"></i> Física</a></li>
+                    <li><a href="<?= BASE_URL ?>/docentes/filtrarPorMateria/matematicas" class="menu-lateral__submenu-enlace"><i class="fas fa-infinity menu-lateral__submenu-icono"></i> Matemáticas</a></li>
+                    <li><a href="<?= BASE_URL ?>/docentes/filtrarPorMateria/quimica" class="menu-lateral__submenu-enlace"><i class="fas fa-flask menu-lateral__submenu-icono"></i> Química</a></li>
+                    <li><a href="<?= BASE_URL ?>/docentes/filtrarPorMateria/logica" class="menu-lateral__submenu-enlace"><i class="fas fa-brain menu-lateral__submenu-icono"></i> Lógica</a></li>
+                    <li><a href="<?= BASE_URL ?>/docentes/filtrarPorMateria/calculo-avanzado" class="menu-lateral__submenu-enlace"><i class="fas fa-wave-square menu-lateral__submenu-icono"></i> Cálculo Avanzado</a></li>
+                    <!-- ... y para las demás materias ... -->
                 </ul>
             </li>
             <li class="menu-lateral__item">
@@ -35,15 +45,15 @@
                 </a>
             </li>
             <li class="menu-lateral__item">
-                <a href="#" class="menu-lateral__enlace"> <!-- Ajustar URL si es necesario -->
-                    <i class="fas fa-cog menu-lateral__icono"></i><span class="menu-lateral__texto">Configuración</span>
-                </a>
+                <a href="<?= BASE_URL ?>/configuracion" id="enlaceConfiguracion" class="menu-lateral__enlace <?= ($controlador_actual ?? '') === 'ControladorConfiguracion' ? 'menu-lateral__enlace--activo' : '' ?>">
+        <i class="fas fa-cog menu-lateral__icono"></i><span class="menu-lateral__texto">Configuración</span>
+    </a>
             </li>
             <li class="menu-lateral__item">
-                <a href="#" class="menu-lateral__enlace"> <!-- Ajustar URL para logout -->
-                    <i class="fas fa-sign-out-alt menu-lateral__icono"></i><span class="menu-lateral__texto">Cerrar Sesión</span>
-                </a>
-            </li>
+           <a href="<?= BASE_URL ?>/auth/logout" id="enlaceCerrarSesion" class="menu-lateral__enlace">
+        <i class="fas fa-sign-out-alt menu-lateral__icono"></i><span class="menu-lateral__texto">Cerrar Sesión</span>
+      </a>
+</li>
         </ul>
     </nav>
 </aside>

@@ -5,6 +5,29 @@ document.addEventListener('DOMContentLoaded', function() {
     const botonMenuMovil = document.querySelector('.boton-menu-movil'); // Asumiendo que lo añades al layout_principal.php si no existe
 
     // Crear botón de menú móvil si no existe en el HTML
+    const todosLosEnlacesDelMenu= document.querySelectorAll('.menu-lateral__lista .menu-lateral__enlace');
+    todosLosEnlacesDelMenu.forEach(enlace => {
+        enlace.addEventListener('click', function(event_click_enlace) {
+            const itemPadreActual = this.closest('.menu-lateral__item');
+            const esSubmenuTriggerActual = itemPadreActual && itemPadreActual.classList.contains('has-submenu');
+            const submenuAbierto = itemPadreActual && itemPadreActual.classList.contains('submenu-abierto');
+            if (esSubmenuTriggerActual && submenuAbierto) {
+                event_click_enlace.preventDefault(); // Prevenir el comportamiento por defecto
+                itemPadreActual.classList.remove('submenu-abierto'); // Cerrar el submenú
+            }
+
+
+            // Si el menú está abierto y se hace clic en un enlace, cerrarlo
+            if (menuLateral.classList.contains('menu-abierto-js') && !esSubmenuTriggerActual) {
+                menuLateral.classList.remove('menu-abierto-js');
+                actualizarIconoBotonMovil(false);
+                if (botonMenuMovil) botonMenuMovil.setAttribute('aria-label', 'Abrir menú');
+                itemsConSubmenu.forEach(item => item.classList.remove('submenu-abierto'));
+            }
+        }
+        );
+    });
+
     let btnMenuMovilExistente = document.querySelector('.boton-menu-movil');
     if (!btnMenuMovilExistente) {
         const nuevoBoton = document.createElement('button');

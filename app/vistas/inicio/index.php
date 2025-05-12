@@ -1,35 +1,46 @@
-<div class="contenedor-inicio">
-    <h1><?= htmlspecialchars($datos_vista['titulo_pagina'] ?? $titulo_pagina) ?></h1>
-    <p>Bienvenido a la plataforma TUTTOR-UP. Navega por nuestras secciones usando el menú lateral.</p>
-    <div class="acciones-inicio">
-        <a href="<?= BASE_URL ?>/materias/mostrar" class="btn-accion-inicio">
-            <i class="fas fa-book"></i> Ver Materias
-        </a>
-        <a href="<?= BASE_URL ?>/docentes" class="btn-accion-inicio">
-            <i class="fas fa-chalkboard-teacher"></i> Conocer Docentes
-        </a>
-        <a href="<?= BASE_URL ?>/reservas" class="btn-accion-inicio">
-            <i class="fas fa-calendar-alt"></i> Mis Agendamientos
-        </a>
+<?php
+// Estas variables vienen de $datos_layout['datos_vista'] en ControladorInicio.php
+// y se hacen disponibles aquí por el extract() en el método cargarLayout del controlador.
+$mensaje_bienvenida = $datos_vista['mensaje_bienvenida'] ?? 'Bienvenido a TUTTOR-UP';
+$subtitulo_bienvenida = $datos_vista['subtitulo_bienvenida'] ?? 'Explora nuestras opciones y encuentra lo que necesitas.';
+?>
+
+<div class="hero-inicio">
+    <div class="hero-contenido">
+        <h1><?= htmlspecialchars($mensaje_bienvenida) ?></h1>
+        <p class="subtitulo-hero"><?= htmlspecialchars($subtitulo_bienvenida) ?></p>
+        <div class="hero-cta-botones">
+            <a href="<?= BASE_URL ?>/materias" class="btn-hero-accion">
+                <i class="fas fa-shapes"></i> Ver Nuestras Materias
+            </a>
+            <a href="<?= BASE_URL ?>/docentes" class="btn-hero-accion btn-secundario">
+                <i class="fas fa-chalkboard-teacher"></i> Encontrar un Tutor
+            </a>
+        </div>
+    </div>
+    <div class="hero-imagen-decorativa">
+        <img src="<?= ASSETS_URL ?>/imagenes/logo.png" alt="Logo Decorativo Tuttor-Up" class="img-fluid-hero">
     </div>
 </div>
-<style>
-    .contenedor-inicio { text-align: center; padding: 40px 20px; }
-    .contenedor-inicio h1 { font-size: 2.5rem; margin-bottom: 20px; color: var(--color-tuttor-up-green); }
-    .contenedor-inicio p { font-size: 1.1rem; margin-bottom: 30px; color: var(--text-color-light); }
-    .acciones-inicio { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-    .btn-accion-inicio {
-        background-color: var(--color-tuttor-up-green);
-        color: var(--text-color-dark);
-        padding: 15px 25px;
-        border-radius: 8px;
-        text-decoration: none;
-        font-size: 1rem;
-        font-weight: 500;
-        transition: background-color 0.3s ease;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-    }
-    .btn-accion-inicio:hover { background-color: #65d8c0; }
-</style>
+
+<section class="seccion-destacada-inicio">
+    <h2>¿Qué quieres aprender hoy?</h2>
+    <div class="acciones-rapidas-inicio">
+        <a href="<?= BASE_URL ?>/docentes/filtrarPorMateria/calculo" class="accion-rapida-card">
+            <i class="fas fa-calculator"></i>
+            <span>Cálculo</span>
+        </a>
+        <a href="<?= BASE_URL ?>/docentes/filtrarPorMateria/fisica" class="accion-rapida-card">
+            <i class="fas fa-atom"></i>
+            <span>Física</span>
+        </a>
+        <a href="<?= BASE_URL ?>/docentes/filtrarPorMateria/matematicas" class="accion-rapida-card">
+            <i class="fas fa-infinity"></i>
+            <span>Matemáticas</span>
+        </a>
+        <a href="<?= BASE_URL ?>/docentes/filtrarPorMateria/quimica" class="accion-rapida-card">
+            <i class="fas fa-flask"></i>
+            <span>Química</span>
+        </a>
+    </div>
+</section>

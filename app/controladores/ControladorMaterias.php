@@ -13,13 +13,15 @@ class ControladorMaterias {
     /**
      * Muestra la vista principal con la cuadrícula de materias.
      */
-    public function mostrar() {
+    public function index() {
         require_once ROOT_PATH . '/app/modelos/ModeloMaterias.php';
-        $modeloMateria = new ModeloMaterias();
+        $modelo = new ModeloMaterias();
+        $materiasPrincipalesNombres = ['Cálculo', 'Física', 'Matemáticas', 'Química'];
         $materias_raw = $modelo->obtenerTodasLasMaterias();
-
+         
         $materias_data_vista = [];
         foreach ($materias_raw as $m) {
+            if (in_array($m['nombre'], $materiasPrincipalesNombres)) 
             $nombre_url = strtolower(str_replace(' ', '-', preg_replace("/[^A-Za-z0-9 ]/", '', $m['nombre'])));
             $materias_data_vista[] = [
                 'id' => $m['id'],
@@ -30,11 +32,12 @@ class ControladorMaterias {
                 'icono_fa' => $m['icono'],
                 'accion_url' => '/materias/' . $nombre_url
             ];
+          }
         }
         
         $datos_layout['titulo_pagina'] = "Nuestras Materias";
         $datos_layout['controlador_actual'] = 'ControladorMaterias';
-        $datos_layout['metodo_actual'] = 'mostrar';
+        $datos_layout['metodo_actual'] = 'index';
         $datos_layout['datos_vista'] = ['materias_data' => $materias_data_vista]; // Datos específicos para la vista
 
         $this->cargarLayout(ROOT_PATH . '/app/vistas/materias/index.php', $datos_layout);

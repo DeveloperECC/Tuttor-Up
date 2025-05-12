@@ -5,6 +5,9 @@
   --color-fisica: #349b79;
   --color-matematicas: #5ce1e6;
   --color-quimica: #6c757d; /* Gris oscuro/medio para Química */
+  --color-menu-background-rgb: 37, 41, 48; /* Si --color-menu-background es #252930 */
+    --color-background-rgb: 26, 29, 33;     /* Si --color-background es #1a1d21 */
+    --color-tuttor-up-green-rgb: 118, 240, 214; /* Si --color-tuttor-up-green es #76f0d6 */
 
   --color-tuttor-up-green: #76f0d6;
   --color-header-background: rgba(37, 41, 48, 0.8);
