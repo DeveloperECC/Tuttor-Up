@@ -1,56 +1,64 @@
 /* publico/css/variables.css */
 :root {
-  /* ... (Colores de tarjetas y generales como en la última versión que te di) ... */
+  /* Colores de Tarjetas y Generales */
   --color-calculo: #349b79;
-  --color-fisica: #349b79;
-  --color-matematicas: #5ce1e6;
-  --color-quimica: #6c757d; /* Gris oscuro/medio para Química */
-  --color-menu-background-rgb: 37, 41, 48; /* Si --color-menu-background es #252930 */
-    --color-background-rgb: 26, 29, 33;     /* Si --color-background es #1a1d21 */
-    --color-tuttor-up-green-rgb: 118, 240, 214; /* Si --color-tuttor-up-green es #76f0d6 */
+  --color-fisica: #349b79; /* Mismo color que Cálculo según mockup */
+  --color-matematicas: #5ce1e6; /* Celeste */
+  --color-quimica: #6c757d;   /* Gris oscuro/medio */
+  --color-tarjeta-fondo-base: #2a2e34; /* Un gris oscuro, un poco más claro que el menú */
+  --color-tarjeta-borde: rgba(var(--color-tuttor-up-green-rgb), 0.3);
 
+  /* Variables RGB para opacidad */
+  --color-menu-background-rgb: 37, 41, 48;     /* De #252930 */
+  --color-background-rgb: 26, 29, 33;          /* De #1a1d21 */
+  --color-tuttor-up-green-rgb: 118, 240, 214;  /* De #76f0d6 */
+
+  /* Colores Generales de la App */
   --color-tuttor-up-green: #76f0d6;
-  --color-header-background: rgba(37, 41, 48, 0.8);
+  --color-header-background: rgba(37, 41, 48, 0.8); /* Usa --color-menu-background-rgb para consistencia si quieres */
   --color-background: #1a1d21;
   --color-menu-background: #252930;
   --text-color-light: #ffffff;
   --text-color-dark: #222222;
   --text-color-muted: #adb5bd;
 
-  /* Menú Lateral Principal (de la sección Materias) */
+  /* Menú Lateral Principal */
   --menu-width-expanded: 240px; /* 15rem */
   --menu-width-collapsed: 70px;  /* 4.375rem */
   --ancho-lateral: var(--menu-width-expanded);
   --asa-lateral: var(--menu-width-collapsed);
   --fondo-lateral: var(--color-menu-background);
   --texto-atenuado: var(--text-color-muted);
-  --texto-claro: var(--color-tuttor-up-green);
+  --texto-claro: var(--color-tuttor-up-green); /* Texto activo/hover en menú */
 
-  /* Tamaños de fuente para la sección Materias */
-  --tamano-fuente-base-rem: 1rem;
-  --tamano-icono-menu-rem: 1.5rem; /* Iconos de menú un poco más grandes */
-  --tamano-texto-menu-rem: 1rem;   /* Texto de menú un poco más grande */
+  /* Tamaños de Fuente y Elementos del Menú */
+  --tamano-fuente-base-rem: 1rem;        /* 16px si la base del html es 16px */
+  --tamano-icono-menu-rem: 1.375rem;     /* Ajustado de 1.5rem para ser un poco menos grande que el texto base */
+  --tamano-texto-menu-rem: 0.9375rem;    /* Texto del menú un poco más pequeño que el base (15px) */
 
-  --tamano-icono-tarjeta-grande-rem: 5rem; /* Cálculo */
-  --tamano-icono-tarjeta-media-rem: 3.25rem;  /* Física, Mate */
-  --tamano-icono-tarjeta-quimica-rem: 3rem; /* Química */
+  /* Tamaños para Tarjetas de Materias */
+  --alto-min-tarjeta-materia: 14rem; /* Altura mínima para las filas del grid de materias */
+  --tamano-icono-tarjeta-grande-rem: 4.5rem;  /* Cálculo (ajustado de 5rem) */
+  --tamano-icono-tarjeta-media-rem: 3rem;     /* Física, Mate (ajustado de 3.25rem) */
+  --tamano-icono-tarjeta-quimica-rem: 2.8rem; /* Química (ajustado de 3rem) */
 
-  --tamano-codigo-calculo-rem: 6.5rem;
+  --tamano-codigo-calculo-rem: 6rem;          /* Cálculo (ajustado de 6.5rem) */
   --line-height-codigo-calculo: 0.8;
-  --tamano-codigo-fismat-rem: 2.5rem; /* Física y Mate */
+  --tamano-codigo-fismat-rem: 2.8rem;         /* Física y Mate (ajustado de 2.5rem para más impacto) */
   --line-height-codigo-fismat: 0.85;
-  --tamano-codigo-quimica-rem: 2.25rem; /* Química */
+  --tamano-codigo-quimica-rem: 2.25rem;       /* Química (se mantiene) */
   --line-height-codigo-quimica: 0.9;
 
-  --tamano-descripcion-tarjeta-rem: 0.9375rem; /* 15px */
+  --tamano-descripcion-tarjeta-rem: 0.875rem; /* Descripción un poco más pequeña (14px) */
 
-  /* Gap del grid */
+  /* Gap del Grid */
   --grid-gap: 18px; /* 1.125rem */
 
-  /* === NUEVAS PROPORCIONES DEL GRID DE MATERIAS (Layout de imagen) === */
-  /* Usaremos 10 columnas "virtuales" para más precisión */
-  /* Col 1-4: Cálculo (40%) */
-  /* Col 5-6: Física (20% - más angosto) */
-  /* Col 7-10: Matemáticas (40%) */
-  /* Química: Debajo de Física, extendiéndose. Col 5-8 (40%) */
+  /* Comentarios sobre el layout del grid (informativo, no son variables CSS) */
+  /* Grid de Materias (10 columnas virtuales):
+     Cálculo:     Col 1-4 (40%), Filas 1-2
+     Física:      Col 5-6 (20%), Fila 1
+     Matemáticas: Col 7-10(40%), Fila 1
+     Química:     Col 5-8 (40%), Fila 2
+  */
 }

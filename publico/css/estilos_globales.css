@@ -310,36 +310,48 @@ body::before {
 /* --- Contenedor y Tarjetas de Materias --- */
 .contenedor-materias {
   display: grid;
-  grid-template-columns: repeat(10, 1fr); /* Usando 10 columnas virtuales como en estilos_materias.css */
-  grid-template-rows: auto auto;
-  gap: var(--grid-gap, 1rem);
-  margin-top: 1.5rem;
-  max-width: 70rem; /* Igual que en estilos_materias.css */
+  grid-template-columns: repeat(10, 1fr); /* 10 columnas virtuales para el layout del mockup */
+  grid-template-rows: repeat(2, minmax(180px, auto)); /* Dos filas, altura mínima y autoajustable */
+  gap: var(--grid-gap, 18px); /* Usar variable de variables.css */
+  margin-top: 2.5rem;
+  max-width: 70rem; /* Más ancho para acomodar el layout */
   margin-left: auto; margin-right: auto;
   position: relative; z-index: 2;
 }
-.materia-card.calculo { grid-column: 1 / span 4; grid-row: 1 / span 2; }
-.materia-card.fisica { grid-column: 5 / span 2; grid-row: 1 / 2; }
-.materia-card.matematicas { grid-column: 7 / span 4; grid-row: 1 / 2; } /* Corregido de .matematica */
-.materia-card.quimica { grid-column: 5 / span 4; grid-row: 2 / 3; }
-
+.materia-card.calculo {
+  grid-column: 1 / span 4;  /* Col 1-4 */
+  grid-row: 1 / span 2;     /* Filas 1-2 */
+}
+.materia-card.fisica {
+  grid-column: 5 / span 2;  /* Col 5-6 */
+  grid-row: 1 / 2;          /* Fila 1 */
+}
+.materia-card.matematicas { /* Asegúrate que la clase generada por PHP sea 'matematicas' */
+  grid-column: 7 / span 4;  /* Col 7-10 */
+  grid-row: 1 / 2;          /* Fila 1 */
+}
+.materia-card.quimica {
+  grid-column: 5 / span 4;  /* Col 5-8 */
+  grid-row: 2 / 3;          /* Fila 2 */
+}
 .materia-card {
   text-decoration: none;
-  padding: 1.5rem;
-  border-radius: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.25);
+  padding: 1.5rem; /* Un poco más de padding para el nuevo layout */
+  border-radius: 0.75rem; /* Un poco más de redondeo */
+  display: flex; /* Convertir la tarjeta en un contenedor flex */
+  flex-direction: column; /* Sus hijos se apilan verticalmente */
+  justify-content: space-between; /* CLAVE: Icono arriba, texto abajo */
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  box-shadow: 0 0.2rem 0.6rem rgba(0,0,0,0.2);
   position: relative;
   overflow: hidden;
   width: 100%;
   color: var(--text-color-light);
-  min-height: 12rem; /* Un poco más de altura mínima para el nuevo layout */
+  min-height: 12rem; /* Ajustar según el contenido y diseño que desees */
 }
 .materia-card:hover {
-  transform: translateY(-0.25rem) scale(1.015);
-  box-shadow: 0 0.5rem 1.25rem rgba(0,0,0,0.3);
+  transform: translateY(-0.2rem) scale(1.01);
+  box-shadow: 0 0.4rem 1rem rgba(0,0,0,0.25);
 }
 
 .materia-card.calculo { background-color: var(--color-calculo); }

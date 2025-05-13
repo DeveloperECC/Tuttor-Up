@@ -2,7 +2,7 @@
 // Estas variables vienen de $datos_layout['datos_vista'] en ControladorInicio.php
 // y se hacen disponibles aquí por el extract() en el método cargarLayout del controlador.
 $mensaje_bienvenida = $datos_vista['mensaje_bienvenida'] ?? 'Bienvenido a TUTTOR-UP';
-$subtitulo_bienvenida = $datos_vista['subtitulo_bienvenida'] ?? 'Explora nuestras opciones y encuentra lo que necesitas.';
+$subtitulo_bienvenida = $datos_vista['subtitulo_bienvenida'] ?? 'Tu plataforma ideal para encontrar el tutor perfecto y potenciar tu aprendizaje. <br> Navega a traves del menú lateral y descubre todo lo que tenemos para ofrecerte.';
 ?>
 
 <div class="hero-inicio">
