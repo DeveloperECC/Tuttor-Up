@@ -1,64 +1,72 @@
 /* publico/css/variables.css */
 :root {
-  /* Colores de Tarjetas y Generales */
-  --color-calculo: #349b79;
-  --color-fisica: #349b79; /* Mismo color que Cálculo según mockup */
-  --color-matematicas: #5ce1e6; /* Celeste */
-  --color-quimica: #6c757d;   /* Gris oscuro/medio */
-  --color-tarjeta-fondo-base: #2a2e34; /* Un gris oscuro, un poco más claro que el menú */
-  --color-tarjeta-borde: rgba(var(--color-tuttor-up-green-rgb), 0.3);
-
-  /* Variables RGB para opacidad */
-  --color-menu-background-rgb: 37, 41, 48;     /* De #252930 */
-  --color-background-rgb: 26, 29, 33;          /* De #1a1d21 */
-  --color-tuttor-up-green-rgb: 118, 240, 214;  /* De #76f0d6 */
-
-  /* Colores Generales de la App */
+  /* --- PALETA DE COLORES PRINCIPAL --- */
   --color-tuttor-up-green: #76f0d6;
-  --color-header-background: rgba(37, 41, 48, 0.8); /* Usa --color-menu-background-rgb para consistencia si quieres */
-  --color-background: #1a1d21;
-  --color-menu-background: #252930;
-  --text-color-light: #ffffff;
-  --text-color-dark: #222222;
-  --text-color-muted: #adb5bd;
+  --color-tuttor-up-green-rgb: 118, 240, 214;
 
-  /* Menú Lateral Principal */
-  --menu-width-expanded: 240px; /* 15rem */
-  --menu-width-collapsed: 70px;  /* 4.375rem */
+  --color-background: #1a1d21;
+  --color-background-rgb: 26, 29, 33;
+
+  --color-menu-background: #252930; /* Usado para sidebar, footer, y posiblemente tarjetas */
+  --color-menu-background-rgb: 37, 41, 48;
+
+  --color-header-background: rgba(var(--color-menu-background-rgb), 0.85); /* Header con opacidad, basado en el color del menú */
+  
+  --color-tarjeta-fondo-general: #282c34; /* Un gris oscuro neutro para fondos de tarjetas (materias, docentes, etc.) */
+  --color-tarjeta-borde-sutil: rgba(var(--color-tuttor-up-green-rgb), 0.2); /* Borde sutil para tarjetas */
+
+  /* Texto */
+  --text-color-light: #ffffff;
+  --text-color-dark: #222222; /* Para texto sobre fondos claros/verdes */
+  --text-color-muted: #adb5bd; /* Para texto secundario o atenuado */
+  --texto-atenuado: var(--text-color-muted); /* Alias para menú */
+  --texto-claro: var(--color-tuttor-up-green); /* Texto activo/hover en menú */
+
+  /* Colores específicos de Materia (para acentos, no necesariamente fondo completo de tarjeta) */
+  --color-calculo: #349b79;
+  --color-fisica: #349b79;
+  --color-matematicas: #5ce1e6;
+  --color-quimica: #6c757d;
+
+  /* --- MENÚ LATERAL --- */
+  --menu-width-expanded: 240px;
+  --menu-width-collapsed: 70px;
   --ancho-lateral: var(--menu-width-expanded);
   --asa-lateral: var(--menu-width-collapsed);
   --fondo-lateral: var(--color-menu-background);
-  --texto-atenuado: var(--text-color-muted);
-  --texto-claro: var(--color-tuttor-up-green); /* Texto activo/hover en menú */
 
   /* Tamaños de Fuente y Elementos del Menú */
-  --tamano-fuente-base-rem: 1rem;        /* 16px si la base del html es 16px */
-  --tamano-icono-menu-rem: 1.375rem;     /* Ajustado de 1.5rem para ser un poco menos grande que el texto base */
-  --tamano-texto-menu-rem: 0.9375rem;    /* Texto del menú un poco más pequeño que el base (15px) */
+  --tamano-fuente-base-rem: 1rem;
+  --tamano-icono-menu-rem: 1.375rem;
+  --tamano-texto-menu-rem: 0.9375rem;
 
-  /* Tamaños para Tarjetas de Materias */
-  --alto-min-tarjeta-materia: 14rem; /* Altura mínima para las filas del grid de materias */
-  --tamano-icono-tarjeta-grande-rem: 4.5rem;  /* Cálculo (ajustado de 5rem) */
-  --tamano-icono-tarjeta-media-rem: 3rem;     /* Física, Mate (ajustado de 3.25rem) */
-  --tamano-icono-tarjeta-quimica-rem: 2.8rem; /* Química (ajustado de 3rem) */
+  /* --- TARJETAS DE MATERIAS (Layout Mockup) --- */
+  --alto-min-tarjeta-materia: 15rem; /* Aumentado un poco para más espacio */
+  
+  /* Iconos en tarjetas de materia */
+  --tamano-icono-tarjeta-grande-rem: 5rem;  /* Cálculo */
+  --tamano-icono-tarjeta-media-rem: 3.5rem; /* Física, Mate */
+  --tamano-icono-tarjeta-quimica-rem: 3.2rem;/* Química */
 
-  --tamano-codigo-calculo-rem: 6rem;          /* Cálculo (ajustado de 6.5rem) */
-  --line-height-codigo-calculo: 0.8;
-  --tamano-codigo-fismat-rem: 2.8rem;         /* Física y Mate (ajustado de 2.5rem para más impacto) */
-  --line-height-codigo-fismat: 0.85;
-  --tamano-codigo-quimica-rem: 2.25rem;       /* Química (se mantiene) */
-  --line-height-codigo-quimica: 0.9;
+  /* Código de materia (CAL CU LO) */
+  --tamano-codigo-calculo-rem: 6.5rem;
+  --line-height-codigo-calculo: 0.75; /* Más compacto */
+  --tamano-codigo-fismat-rem: 3rem;   /* Física y Mate */
+  --line-height-codigo-fismat: 0.8;  /* Más compacto */
+  --tamano-codigo-quimica-rem: 2.5rem; /* Química */
+  --line-height-codigo-quimica: 0.85; /* Más compacto */
 
-  --tamano-descripcion-tarjeta-rem: 0.875rem; /* Descripción un poco más pequeña (14px) */
+  /* Descripción en tarjetas de materia */
+  --tamano-descripcion-tarjeta-rem: 0.9rem; /* 14.4px, ligeramente más grande */
 
-  /* Gap del Grid */
-  --grid-gap: 18px; /* 1.125rem */
+  /* --- TARJETAS DE DOCENTES --- */
+  --tamano-imagen-docente: 120px; /* Aumentado de 100px o 130px */
+  --padding-tarjeta-docente: 20px; /* Para dar más espacio interno */
+  --etiqueta-destacado-top: 15px; /* Ajustar para que no se solape con imagen más grande */
+  --etiqueta-destacado-left: 15px;
 
-  /* Comentarios sobre el layout del grid (informativo, no son variables CSS) */
-  /* Grid de Materias (10 columnas virtuales):
-     Cálculo:     Col 1-4 (40%), Filas 1-2
-     Física:      Col 5-6 (20%), Fila 1
-     Matemáticas: Col 7-10(40%), Fila 1
-     Química:     Col 5-8 (40%), Fila 2
-  */
+
+  /* --- GRID Y ESPACIADO --- */
+  --grid-gap: 20px; /* Aumentado ligeramente de 18px */
+
 }
