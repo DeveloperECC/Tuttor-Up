@@ -24,7 +24,7 @@ class ControladorMaterias {
             $len = strlen($palabra);
             if ($len <= 3) $html = $palabra;
             elseif ($len <= 5) $html = substr($palabra,0,3) . "<br>" . substr($palabra,3);
-            else $html = substr($palabra,0,3) . "<br>" . substr($palabra,3,2) . "<br>" . substr($palabra,5,2);
+            else $html = substr($palabra,0,4) . "<br>" . substr($palabra,4,8);
         }
         return trim(trim($html), "<br>");
     }
@@ -156,10 +156,6 @@ class ControladorMaterias {
     public function fisica() { $this->mostrarMateriaEspecificaPorUrl('fisica'); }
     public function matematicas() { $this->mostrarMateriaEspecificaPorUrl('matematicas'); }
     public function quimica() { $this->mostrarMateriaEspecificaPorUrl('quimica'); }
-    public function logica() { $this->mostrarMateriaEspecificaPorUrl('logica'); }
-    public function fisicaavanzada() { $this->mostrarMateriaEspecificaPorUrl('fisica-avanzada'); }
-    public function calculoavanzado() { $this->mostrarMateriaEspecificaPorUrl('calculo-avanzado'); }
-    public function matematicasindustriales() { $this->mostrarMateriaEspecificaPorUrl('matematicas-industriales'); }
-    public function cienciasambientales() { $this->mostrarMateriaEspecificaPorUrl('ciencias-ambientales'); }
+    
 }
 ?>

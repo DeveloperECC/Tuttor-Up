@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const allTeachersOriginal = teachersDataFromPHP;
     let currentFilteredTeachers = allTeachersOriginal.slice();
     let currentPage = 0;
-    const cardsPerPage = 6;
+    const cardsPerPage = 4;
 
     // Elementos del DOM
     const cardsContainer = document.getElementById('cards-container-docentes');

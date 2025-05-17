@@ -1,4 +1,5 @@
 <?php
+// Se pasan los datos de PHP a JavaScript de forma segura.
 $docentes_json = json_encode($datos_vista['docentes'] ?? []);
 $materia_filtrada_json = isset($datos_vista['materia_filtrada']) ? json_encode($datos_vista['materia_filtrada']) : 'null';
 ?>
@@ -6,14 +7,19 @@ $materia_filtrada_json = isset($datos_vista['materia_filtrada']) ? json_encode($
 <div class="vista-docentes-wrapper">
 
     <aside id="filtrosDocentes" class="barra-lateral-filtros-docentes">
-        <!-- ****** INICIO DE CAMBIO: Estructura de la barra de búsqueda ****** -->
-        <div class="search-bar-docentes"> <!-- Nueva clase contenedora, similar a la del header -->
-          <input type="text" placeholder="Buscar docente o materia..." class="busqueda-input-docentes" id="docentesSearchInput">
-          <button type="button" class="search-button-docentes" id="docentesSearchButton" aria-label="Buscar">
-              <i class="fas fa-search"></i>
-          </button>
-        </div>
-        <!-- ****** FIN DE CAMBIO: Estructura de la barra de búsqueda ****** -->
+        <!-- Estructura de la barra de búsqueda similar a la del header principal -->
+        <div class="search-bar-docentes"> <!-- Contenedor principal de la barra de búsqueda de docentes -->
+  <input type="text" 
+         placeholder="Buscar docente..." 
+         class="busqueda-input-docentes" 
+         id="docentesSearchInput">
+  <button type="button" 
+          class="search-button-docentes" 
+          id="docentesSearchButton" 
+          aria-label="Buscar">
+      <i class="fas fa-search"></i>
+  </button>
+</div>
         
         <div class="barra-lateral__grupo-filtro">
           <h4 class="barra-lateral__titulo-filtro">Áreas de estudio</h4>
@@ -29,26 +35,28 @@ $materia_filtrada_json = isset($datos_vista['materia_filtrada']) ? json_encode($
           <label class="barra-lateral__item-filtro">
             <input type="checkbox" class="barra-lateral__checkbox-filtro filtro-materia" value="Física"> Física
           </label>
+          <!-- Puedes añadir más materias aquí si es necesario -->
         </div>
+
        <div class="barra-lateral__grupo-filtro">
         <h4 class="barra-lateral__titulo-filtro">Calificación Mínima</h4>
         <label class="barra-lateral__item-filtro">
             <input type="radio" name="filtro_rating_radio" class="barra-lateral__checkbox-filtro filtro-rating" value="5">
             <i class="fas fa-star barra-lateral__icono-valoracion"></i><i class="fas fa-star barra-lateral__icono-valoracion"></i><i class="fas fa-star barra-lateral__icono-valoracion"></i><i class="fas fa-star barra-lateral__icono-valoracion"></i><i class="fas fa-star barra-lateral__icono-valoracion"></i>
-            <span class="rating-text"> y más</span>
+            <span class="rating-text"> 5 estrellas</span>
         </label>
         <label class="barra-lateral__item-filtro">
             <input type="radio" name="filtro_rating_radio" class="barra-lateral__checkbox-filtro filtro-rating" value="4">
             <i class="fas fa-star barra-lateral__icono-valoracion"></i><i class="fas fa-star barra-lateral__icono-valoracion"></i><i class="fas fa-star barra-lateral__icono-valoracion"></i><i class="fas fa-star barra-lateral__icono-valoracion"></i><i class="far fa-star barra-lateral__icono-valoracion"></i>
-            <span class="rating-text"> y más</span>
+            <span class="rating-text"> 4+ estrellas</span>
         </label>
         <label class="barra-lateral__item-filtro">
             <input type="radio" name="filtro_rating_radio" class="barra-lateral__checkbox-filtro filtro-rating" value="3">
             <i class="fas fa-star barra-lateral__icono-valoracion"></i><i class="fas fa-star barra-lateral__icono-valoracion"></i><i class="fas fa-star barra-lateral__icono-valoracion"></i><i class="far fa-star barra-lateral__icono-valoracion"></i><i class="far fa-star barra-lateral__icono-valoracion"></i>
-            <span class="rating-text"> y más</span>
+            <span class="rating-text"> 3+ estrellas</span>
         </label>
          <label class="barra-lateral__item-filtro">
-            <input type="radio" name="filtro_rating_radio" class="barra-lateral__checkbox-filtro filtro-rating" value="0" checked>
+            <input type="radio" name="filtro_rating_radio" class="barra-lateral__checkbox-filtro filtro-rating" value="0" checked> <!-- Valor 0 o vacío para "Todos" -->
             Todos
         </label>
       </div>
@@ -57,9 +65,9 @@ $materia_filtrada_json = isset($datos_vista['materia_filtrada']) ? json_encode($
     <div class="contenido-principal-docentes">
         <header class="barra-superior-docentes">
           <h1 id="subject-title-docentes" class="barra-superior__titulo-docentes">DOCENTES</h1>
+          <!-- Los botones de YouTube y AR han sido eliminados -->
           <div class="barra-superior__acciones-docentes">
-            <button aria-label="Videos de YouTube"><i class="fab fa-youtube"></i></button>
-            <button aria-label="Realidad Aumentada">AR</button>
+            <!-- Espacio para futuros iconos si los necesitas, ej. un botón de ordenar -->
           </div>
         </header>
         <section id="carouselDocentes" class="carrusel-docentes">
@@ -70,6 +78,7 @@ $materia_filtrada_json = isset($datos_vista['materia_filtrada']) ? json_encode($
           <button class="carrusel__boton carrusel__boton--siguiente" aria-label="Siguiente"><i class="fas fa-chevron-right"></i></button>
         </section>
 
+        <!-- Contenedor de Reserva (sin cambios estructurales aquí) -->
         <div id="reserva-container-docentes" class="reserva-vista-oculta">
             <button id="volver-a-docentes-btn" class="boton-volver-docentes"><i class="fas fa-arrow-left"></i> Volver a Docentes</button>
             <div class="reserva-contenido">
@@ -94,6 +103,7 @@ $materia_filtrada_json = isset($datos_vista['materia_filtrada']) ? json_encode($
     </div>
 </div>
 
+<!-- Modal de Horarios (sin cambios estructurales aquí) -->
 <div id="horarioModalDocentes" class="modal-horarios">
     <div class="modal-contenido">
       <span class="cerrar-modal" id="closeModalHorariosDocentes">×</span>

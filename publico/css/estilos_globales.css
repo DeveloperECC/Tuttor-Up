@@ -105,6 +105,7 @@ body::before {
   transform: translateY(-0.625rem);
   overflow: hidden;
   transition: opacity 0.2s 0.1s ease, max-height 0.2s 0.1s ease, transform 0.2s 0.1s ease;
+  padding: 0.5rem;
 }
 .menu-lateral:hover .menu-lateral__logo-text,
 .menu-lateral.menu-abierto-js .menu-lateral__logo-text {
@@ -121,13 +122,13 @@ body::before {
   align-items: stretch;
   padding: 0;
   margin: 0;
-  padding-left: 1rem;
+  
 }
 
 .menu-lateral__item {
   margin: 0.125rem 0;
   width: 100%;
-  padding: 1rem;
+  padding-left: 0.3rem;
 }
 
 .menu-lateral__enlace {
@@ -135,7 +136,7 @@ body::before {
   align-items: center;
   text-decoration: none;
   outline: none;
-  padding: 0.75rem 0;
+  padding: 0.75rem 0.5rem;
   color: var(--texto-atenuado);
   transition: background-color 0.15s ease, color 0.15s ease;
   overflow: hidden;
@@ -154,7 +155,7 @@ body::before {
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
-  padding: 0.5rem;
+  padding-left: 0.1rem;
 }
 
 .menu-lateral__texto {
@@ -165,6 +166,7 @@ body::before {
   transform: translateX(-0.625rem);
   overflow: hidden;
   transition: opacity 0.15s 0.05s ease-out, max-width 0.15s 0.05s ease-out, transform 0.15s 0.05s ease-out, margin-left 0.15s 0.05s ease-out;
+  padding-left: 0.5rem;
 }
 .menu-lateral:hover .menu-lateral__texto,
 .menu-lateral.menu-abierto-js .menu-lateral__texto {
@@ -341,10 +343,10 @@ body::before {
   margin-left: auto; margin-right: auto;
   position: relative; z-index: 2;
 }
-.materia-card.calculo    { grid-column: 1 / span 4; grid-row: 1 / span 2; }
-.materia-card.fisica     { grid-column: 5 / span 2; grid-row: 1 / 2; }
+.materia-card.calculo    { grid-column: 1 / span 3; grid-row: 1 /  2; }
+.materia-card.fisica     { grid-column: 4 / span 3; grid-row: 1 / 2; }
 .materia-card.matematicas { grid-column: 7 / span 4; grid-row: 1 / 2; }
-.materia-card.quimica    { grid-column: 5 / span 4; grid-row: 2 / 3; }
+.materia-card.quimica    { grid-column: 4 / span 3; grid-row: 2 / 3; }
 
 .materia-card {
   text-decoration: none;

@@ -50,7 +50,7 @@
 
   /* Código de materia (CAL CU LO) */
   --tamano-codigo-calculo-rem: 6.5rem;
-  --line-height-codigo-calculo: 0.75; /* Más compacto */
+  --line-height-codigo-calculo: 0.55; /* Más compacto */
   --tamano-codigo-fismat-rem: 3rem;   /* Física y Mate */
   --line-height-codigo-fismat: 0.8;  /* Más compacto */
   --tamano-codigo-quimica-rem: 2.5rem; /* Química */

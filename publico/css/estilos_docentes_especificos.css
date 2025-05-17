@@ -8,59 +8,55 @@
 }
 
 /* --- BARRA LATERAL DE FILTROS PARA DOCENTES --- */
-.barra-lateral-filtros-docentes {
-  width: 280px; 
-  min-width: 260px;
-  background: var(--color-menu-background);
-  padding: 20px;
-  border-radius: 8px;
-  height: auto; 
-  flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+.search-bar-docentes {
+  display: flex;
+  align-items: center; /* Para alinear verticalmente input y botón */
+  /* flex-grow: 1; No necesario si está dentro de un aside de ancho fijo */
+  margin-bottom: 25px; /* Espacio debajo de la barra de búsqueda */
+  
+  /* Estilos replicados del .header .search-bar */
+  max-width: 100%; /* Ocupa el ancho del aside */
+  background-color: rgba(50, 55, 63, 0.7); /* Mismo fondo que el header search */
+  border-radius: 1.875rem; /* Mismo borde redondeado */
+  overflow: hidden; /* Para que el botón no se salga del redondeo */
+  border: 1px solid rgba(var(--text-color-light-rgb, 255,255,255), 0.15); /* Mismo borde sutil */
+  height: 2.5rem; /* Misma altura */
 }
 
-/* AJUSTE: Barra de búsqueda de docentes como en el modelo anterior */
-.barra-lateral__busqueda {
-  display: flex; 
-  align-items: stretch; 
-  margin-bottom: 25px;
-  border-radius: 25px; 
-  overflow: hidden; 
-  border: 1px solid rgba(var(--text-color-light-rgb, 255,255,255), 0.15);
-  background-color: var(--color-background); /* Fondo para el conjunto */
-}
-
-/* El ícono de lupa ahora está DENTRO del botón, por lo que .barra-lateral__icono-busqueda (si existía antes) no se usa para el input */
-
-.barra-lateral__entrada {
-  flex-grow: 1;
-  padding: 12px 18px; /* Aumentado padding */
-  border: none;
-  background: transparent; /* El wrapper .barra-lateral__busqueda tiene el fondo */
+.busqueda-input-docentes { /* Input dentro de la barra de búsqueda de docentes */
+  flex-grow: 1; /* Ocupa el espacio restante */
+  height: 100%;
+  padding: 0.5rem 1.125rem; /* Mismo padding que el header search input */
+  font-size: 0.9rem; /* Un poco más pequeño para el aside, o usa 0.9375rem */
+  background: none; /* Transparente, el fondo lo da .search-bar-docentes */
   color: var(--text-color-light);
+  border: none;
   outline: none;
-  font-size: 0.9rem;
-}
-.barra-lateral__entrada::placeholder {
-    color: var(--text-color-muted);
-    opacity: 0.7;
 }
 
-.barra-lateral__boton-busqueda { /* Botón verde con la lupa */
-  padding: 0 18px;
+.busqueda-input-docentes::placeholder {
+  color: var(--text-color-muted);
+  opacity: 0.8; /* Un poco más visible el placeholder */
+}
+
+.search-button-docentes { /* Botón de búsqueda de docentes */
+  padding: 0 1.125rem; /* Mismo padding que el header search button */
+  background-color: var(--color-tuttor-up-green);
+  color: var(--text-color-dark); /* Para el ícono de lupa */
   border: none;
-  background: var(--color-tuttor-up-green);
-  color: var(--text-color-dark); /* Para el color del ícono de la lupa */
+  /* El border-radius ya está manejado por el overflow:hidden del contenedor .search-bar-docentes */
   cursor: pointer;
-  transition: background-color .2s;
+  transition: background-color 0.2s ease;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  font-size: 1.1rem; /* Tamaño del ícono de la lupa */
+  flex-shrink: 0; /* Para que no se encoja */
+  font-size: 1rem; /* Tamaño del ícono de la lupa */
 }
-.barra-lateral__boton-busqueda:hover {
-  background-color: #5ce1e6; /* Un verde más claro al hover */
+
+.search-button-docentes:hover {
+  background-color: #5ce1e6; /* Un verde más claro al hover, o el mismo que el header button hover */
 }
 /* FIN DE AJUSTE: Barra de búsqueda */
 
