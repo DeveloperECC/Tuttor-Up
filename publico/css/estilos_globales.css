@@ -154,7 +154,7 @@ body::before {
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
-  padding-left: 0.5rem;
+  padding: 0.5rem;
 }
 
 .menu-lateral__texto {
