@@ -1,22 +1,20 @@
 <?php
-// Los datos de los docentes vienen de $datos_vista['docentes'] (que es un array)
-// y $datos_vista['materia_filtrada'] (que es un string o null).
-// Estas variables son creadas por el extract() en el método cargarLayout del controlador.
 $docentes_json = json_encode($datos_vista['docentes'] ?? []);
 $materia_filtrada_json = isset($datos_vista['materia_filtrada']) ? json_encode($datos_vista['materia_filtrada']) : 'null';
 ?>
 
-<!-- Contenedor principal para la página de docentes, que permitirá el layout flex -->
 <div class="vista-docentes-wrapper">
 
-    <!-- Barra lateral de filtros -->
     <aside id="filtrosDocentes" class="barra-lateral-filtros-docentes">
-        <div class="barra-lateral__busqueda">
-          <i class="fas fa-search barra-lateral__icono-busqueda"></i> <!-- Cambiado icono por uno más genérico de búsqueda -->
-          <input type="text" placeholder="Buscar docente..." class="barra-lateral__entrada" id="docentesSearchInput">
-          <!-- El botón de búsqueda puede ser opcional si la búsqueda es en tiempo real con el input -->
-          <!-- <button class="barra-lateral__boton-busqueda" id="docentesSearchButton">Buscar</button> -->
+        <!-- ****** INICIO DE CAMBIO: Estructura de la barra de búsqueda ****** -->
+        <div class="search-bar-docentes"> <!-- Nueva clase contenedora, similar a la del header -->
+          <input type="text" placeholder="Buscar docente o materia..." class="busqueda-input-docentes" id="docentesSearchInput">
+          <button type="button" class="search-button-docentes" id="docentesSearchButton" aria-label="Buscar">
+              <i class="fas fa-search"></i>
+          </button>
         </div>
+        <!-- ****** FIN DE CAMBIO: Estructura de la barra de búsqueda ****** -->
+        
         <div class="barra-lateral__grupo-filtro">
           <h4 class="barra-lateral__titulo-filtro">Áreas de estudio</h4>
           <label class="barra-lateral__item-filtro">
@@ -31,33 +29,31 @@ $materia_filtrada_json = isset($datos_vista['materia_filtrada']) ? json_encode($
           <label class="barra-lateral__item-filtro">
             <input type="checkbox" class="barra-lateral__checkbox-filtro filtro-materia" value="Física"> Física
           </label>
-          <!-- Podrías generar estas opciones dinámicamente desde el controlador si tienes muchas materias -->
         </div>
        <div class="barra-lateral__grupo-filtro">
         <h4 class="barra-lateral__titulo-filtro">Calificación Mínima</h4>
         <label class="barra-lateral__item-filtro">
-            <input type="radio" name="filtro_rating_radio" class="barra-lateral__checkbox-filtro filtro-rating" value="5"> <!-- Cambiado a radio para selección única -->
+            <input type="radio" name="filtro_rating_radio" class="barra-lateral__checkbox-filtro filtro-rating" value="5">
             <i class="fas fa-star barra-lateral__icono-valoracion"></i><i class="fas fa-star barra-lateral__icono-valoracion"></i><i class="fas fa-star barra-lateral__icono-valoracion"></i><i class="fas fa-star barra-lateral__icono-valoracion"></i><i class="fas fa-star barra-lateral__icono-valoracion"></i>
-            <span class="rating-text"> y más</span>
+            <span class="rating-text"> y más</span>
         </label>
         <label class="barra-lateral__item-filtro">
             <input type="radio" name="filtro_rating_radio" class="barra-lateral__checkbox-filtro filtro-rating" value="4">
             <i class="fas fa-star barra-lateral__icono-valoracion"></i><i class="fas fa-star barra-lateral__icono-valoracion"></i><i class="fas fa-star barra-lateral__icono-valoracion"></i><i class="fas fa-star barra-lateral__icono-valoracion"></i><i class="far fa-star barra-lateral__icono-valoracion"></i>
-            <span class="rating-text"> y más</span>
+            <span class="rating-text"> y más</span>
         </label>
         <label class="barra-lateral__item-filtro">
             <input type="radio" name="filtro_rating_radio" class="barra-lateral__checkbox-filtro filtro-rating" value="3">
             <i class="fas fa-star barra-lateral__icono-valoracion"></i><i class="fas fa-star barra-lateral__icono-valoracion"></i><i class="fas fa-star barra-lateral__icono-valoracion"></i><i class="far fa-star barra-lateral__icono-valoracion"></i><i class="far fa-star barra-lateral__icono-valoracion"></i>
-            <span class="rating-text"> y más</span>
+            <span class="rating-text"> y más</span>
         </label>
          <label class="barra-lateral__item-filtro">
-            <input type="radio" name="filtro_rating_radio" class="barra-lateral__checkbox-filtro filtro-rating" value="0" checked> <!-- Opción para "Todos" -->
+            <input type="radio" name="filtro_rating_radio" class="barra-lateral__checkbox-filtro filtro-rating" value="0" checked>
             Todos
         </label>
       </div>
     </aside>
 
-    <!-- Contenedor para el contenido principal de docentes (header, carrusel, vista de reserva) -->
     <div class="contenido-principal-docentes">
         <header class="barra-superior-docentes">
           <h1 id="subject-title-docentes" class="barra-superior__titulo-docentes">DOCENTES</h1>
@@ -69,12 +65,11 @@ $materia_filtrada_json = isset($datos_vista['materia_filtrada']) ? json_encode($
         <section id="carouselDocentes" class="carrusel-docentes">
           <button class="carrusel__boton carrusel__boton--anterior" aria-label="Anterior"><i class="fas fa-chevron-left"></i></button>
           <div class="carrusel__tarjetas" id="cards-container-docentes">
-              <!-- Las tarjetas de docentes se generan por JS (docentes_interacciones.js) -->
+              <!-- Las tarjetas de docentes se generan por JS -->
           </div>
           <button class="carrusel__boton carrusel__boton--siguiente" aria-label="Siguiente"><i class="fas fa-chevron-right"></i></button>
         </section>
 
-        <!-- Vista de Reserva (inicialmente oculta) -->
         <div id="reserva-container-docentes" class="reserva-vista-oculta">
             <button id="volver-a-docentes-btn" class="boton-volver-docentes"><i class="fas fa-arrow-left"></i> Volver a Docentes</button>
             <div class="reserva-contenido">
@@ -99,8 +94,6 @@ $materia_filtrada_json = isset($datos_vista['materia_filtrada']) ? json_encode($
     </div>
 </div>
 
-
-<!-- Modal de Horarios (inicialmente oculto) -->
 <div id="horarioModalDocentes" class="modal-horarios">
     <div class="modal-contenido">
       <span class="cerrar-modal" id="closeModalHorariosDocentes">×</span>
@@ -120,7 +113,6 @@ $materia_filtrada_json = isset($datos_vista['materia_filtrada']) ? json_encode($
     </div>
 </div>
 
-<!-- Pasar datos de PHP a JavaScript -->
 <script>
     const teachersDataFromPHP = <?= $docentes_json ?>;
     const materiaFiltradaDesdePHP = <?= $materia_filtrada_json ?>;
