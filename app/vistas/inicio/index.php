@@ -2,13 +2,19 @@
 // Estas variables vienen de $datos_layout['datos_vista'] en ControladorInicio.php
 // y se hacen disponibles aquí por el extract() en el método cargarLayout del controlador.
 $mensaje_bienvenida = $datos_vista['mensaje_bienvenida'] ?? 'Bienvenido a TUTTOR-UP';
-$subtitulo_bienvenida = $datos_vista['subtitulo_bienvenida'] ?? 'Tu plataforma ideal para encontrar el tutor perfecto y potenciar tu aprendizaje. <br> Navega a traves del menú lateral y descubre todo lo que tenemos para ofrecerte.';
+
+// El <br> ya está en la cadena, así que no se escapará al imprimir para que funcione como salto de línea.
+// Si $datos_vista['subtitulo_bienvenida'] viene del controlador y ya contiene <br>, no necesita htmlspecialchars.
+// Si viniera de una fuente no confiable y quisieras escapar todo MENOS el <br>,
+// la sanitización debería hacerse en el controlador antes de pasar el dato.
+// Para el texto de fallback, el <br> es seguro.
+$subtitulo_bienvenida = $datos_vista['subtitulo_bienvenida'] ?? 'Tu plataforma ideal para encontrar el tutor perfecto y potenciar tu aprendizaje.<br>Navega a través del menú lateral y descubre todo lo que tenemos para ofrecerte.';
 ?>
 
 <div class="hero-inicio">
     <div class="hero-contenido">
-        <h1><?= htmlspecialchars($mensaje_bienvenida) ?></h1>
-        <p class="subtitulo-hero"><?= htmlspecialchars($subtitulo_bienvenida) ?></p>
+        <h1><?= htmlspecialchars($mensaje_bienvenida) // Siempre es buena idea escapar el contenido dinámico principal ?></h1>
+        <p class="subtitulo-hero"><?= $subtitulo_bienvenida // No usamos htmlspecialchars aquí para permitir que <br> funcione ?></p>
         <div class="hero-cta-botones">
             <a href="<?= BASE_URL ?>/materias" class="btn-hero-accion">
                 <i class="fas fa-shapes"></i> Ver Nuestras Materias

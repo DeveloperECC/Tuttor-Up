@@ -1,70 +1,72 @@
+/* publico/css/estilos_docentes_especificos.css */
+
 /* --- CONTENEDOR PRINCIPAL DE LA VISTA DE DOCENTES --- */
 .vista-docentes-wrapper {
-    display: flex; /* Habilita Flexbox para el layout de dos columnas */
-    gap: var(--grid-gap, 20px); /* Espacio entre la barra de filtros y el contenido principal */
-    align-items: flex-start; /* Alinear items al inicio del eje transversal */
+    display: flex;
+    gap: var(--grid-gap, 20px);
+    align-items: flex-start;
 }
 
 /* --- BARRA LATERAL DE FILTROS PARA DOCENTES --- */
 .barra-lateral-filtros-docentes {
   width: 280px; 
-  min-width: 260px; /* Ancho mínimo para evitar que se colapse demasiado */
-  background: var(--color-menu-background); /* Coherencia con el menú lateral principal */
+  min-width: 260px;
+  background: var(--color-menu-background);
   padding: 20px;
   border-radius: 8px;
-  height: auto; /* La altura se ajustará al contenido */
-  /* Considera un max-height si los filtros pueden ser muy largos: */
-  /* max-height: calc(100vh - altura_del_header - padding_general_pagina - 20px); */
-  /* overflow-y: auto; */
-  flex-shrink: 0; /* Importante para que no se encoja si el contenido principal es muy ancho */
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Sombra sutil */
+  height: auto; 
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
+/* AJUSTE: Barra de búsqueda de docentes como en el modelo anterior */
 .barra-lateral__busqueda {
-  display: flex;
-  align-items: center;
+  display: flex; 
+  align-items: stretch; 
   margin-bottom: 25px;
-  background-color: var(--color-background); /* Fondo más oscuro que el de la barra de filtros */
-  border-radius: 25px; /* Input completamente redondeado */
-  padding: 8px 8px 8px 18px; /* Ajustado: T R B L - Más padding izquierdo para el ícono */
-  border: 1px solid rgba(var(--text-color-light-rgb, 255,255,255), 0.1);
+  border-radius: 25px; 
+  overflow: hidden; 
+  border: 1px solid rgba(var(--text-color-light-rgb, 255,255,255), 0.15);
+  background-color: var(--color-background); /* Fondo para el conjunto */
 }
-.barra-lateral__icono-busqueda {
-  font-size: 1rem; 
-  margin-right: 12px;
-  color: var(--text-color-muted);
-  flex-shrink: 0;
-}
+
+/* El ícono de lupa ahora está DENTRO del botón, por lo que .barra-lateral__icono-busqueda (si existía antes) no se usa para el input */
+
 .barra-lateral__entrada {
   flex-grow: 1;
-  padding: 10px 0; /* Padding vertical, horizontal es 0 debido al padding del wrapper */
+  padding: 12px 18px; /* Aumentado padding */
   border: none;
-  background: transparent;
+  background: transparent; /* El wrapper .barra-lateral__busqueda tiene el fondo */
   color: var(--text-color-light);
   outline: none;
-  font-size: 0.9rem; /* Ligeramente más pequeño */
+  font-size: 0.9rem;
 }
 .barra-lateral__entrada::placeholder {
     color: var(--text-color-muted);
     opacity: 0.7;
 }
-.barra-lateral__boton-busqueda { /* Si se decide usarlo */
-  padding: 10px 18px;
+
+.barra-lateral__boton-busqueda { /* Botón verde con la lupa */
+  padding: 0 18px;
   border: none;
   background: var(--color-tuttor-up-green);
-  color: var(--text-color-dark);
-  border-radius: 20px;
+  color: var(--text-color-dark); /* Para el color del ícono de la lupa */
   cursor: pointer;
-  transition: background .2s;
-  margin-left: 8px;
-  font-weight: 500;
+  transition: background-color .2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.1rem; /* Tamaño del ícono de la lupa */
 }
 .barra-lateral__boton-busqueda:hover {
-  background: #5ce1e6;
+  background-color: #5ce1e6; /* Un verde más claro al hover */
 }
+/* FIN DE AJUSTE: Barra de búsqueda */
+
 
 .barra-lateral__grupo-filtro {
-  background: rgba(var(--color-menu-background-rgb, 37, 41, 48), 0.6); /* Fondo ligeramente diferente */
+  background: rgba(var(--color-menu-background-rgb, 37, 41, 48), 0.6);
   padding: 15px;
   border-radius: 6px;
   margin-bottom: 20px;
@@ -72,7 +74,7 @@
 .barra-lateral__titulo-filtro {
   margin-top: 0;
   margin-bottom: 12px;
-  font-size: 0.95rem; /* Un poco más pequeño */
+  font-size: 0.95rem;
   font-weight: 500;
   color: var(--text-color-light);
   border-bottom: 1px solid rgba(var(--text-color-light-rgb,255,255,255),0.1);
@@ -88,18 +90,18 @@
   transition: color 0.2s ease;
 }
 .barra-lateral__item-filtro:hover,
-.barra-lateral__item-filtro input[type="checkbox"]:checked + span, /* Si el texto está en un span */
+.barra-lateral__item-filtro input[type="checkbox"]:checked + span,
 .barra-lateral__item-filtro input[type="radio"]:checked + span,
-.barra-lateral__item-filtro input[type="checkbox"]:checked ~ .fas, /* Si las estrellas están después */
+.barra-lateral__item-filtro input[type="checkbox"]:checked ~ .fas,
 .barra-lateral__item-filtro input[type="radio"]:checked ~ .fas,
 .barra-lateral__item-filtro input[type="checkbox"]:checked ~ .far,
 .barra-lateral__item-filtro input[type="radio"]:checked ~ .far {
-    color: var(--text-color-light); /* Texto y estrellas se aclaran al seleccionar/hover */
+    color: var(--text-color-light);
 }
 .barra-lateral__item-filtro input[type="radio"]:checked ~ .rating-text {
     color: var(--text-color-light);
 }
-.barra-lateral__item-filtro .rating-text { /* Para el texto "y más" o "Todos" */
+.barra-lateral__item-filtro .rating-text {
     font-size: 0.85em;
     margin-left: 5px;
     color: var(--text-color-muted);
@@ -109,51 +111,49 @@
     color: var(--text-color-light);
 }
 
-
-.barra-lateral__checkbox-filtro { /* Aplica a checkbox y radio */
+.barra-lateral__checkbox-filtro {
   margin-right: 10px;
   accent-color: var(--color-tuttor-up-green);
   transform: scale(1.1);
-  position: relative; /* Para algunos navegadores y custom styling */
+  position: relative;
   top: -1px;
 }
-.barra-lateral__icono-valoracion { /* Estrellas */
+.barra-lateral__icono-valoracion {
     color: var(--text-color-muted);
     margin: 0 1px;
     font-size: 0.9em;
     transition: color 0.2s ease;
 }
-.barra-lateral__item-filtro:hover .fas, /* Estrellas en hover */
+.barra-lateral__item-filtro:hover .fas,
 .barra-lateral__item-filtro:hover .far {
     color: var(--text-color-light);
 }
 .barra-lateral__item-filtro input[type="radio"]:checked ~ .fas,
-.barra-lateral__item-filtro input[type="radio"]:checked ~ .far { /* Estrellas activas con radio */
+.barra-lateral__item-filtro input[type="radio"]:checked ~ .far {
     color: var(--color-tuttor-up-green);
 }
 .barra-lateral__item-filtro input[type="checkbox"]:checked ~ .fas,
-.barra-lateral__item-filtro input[type="checkbox"]:checked ~ .far { /* Estrellas activas con checkbox */
+.barra-lateral__item-filtro input[type="checkbox"]:checked ~ .far {
     color: var(--color-tuttor-up-green);
 }
 
-
 /* --- CONTENIDO PRINCIPAL DE LA SECCIÓN DOCENTES --- */
 .contenido-principal-docentes {
-  flex: 1; /* Ocupa el espacio restante */
+  flex: 1;
   display: flex;
   flex-direction: column;
-  min-width: 0; /* Importante para evitar que el contenido empuje la barra de filtros si es muy ancho */
+  min-width: 0;
 }
 
 .barra-superior-docentes {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 0 20px 0; /* Solo padding inferior */
+  padding: 0 0 20px 0;
 }
 .barra-superior__titulo-docentes {
   font-size: 2.5rem;
-  color: rgba(var(--text-color-light-rgb,255,255,255),0.15); /* Un poco más visible */
+  color: rgba(var(--text-color-light-rgb,255,255,255),0.15);
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -163,7 +163,7 @@
   background: transparent;
   border: 1px solid var(--text-color-muted);
   color: var(--text-color-muted);
-  font-size: 0.85rem; /* Ligeramente más pequeño */
+  font-size: 0.85rem;
   padding: 6px 12px;
   border-radius: 20px;
   cursor: pointer;
@@ -178,20 +178,19 @@
     margin-right: 6px;
 }
 
-
 /* --- CARRUSEL DE DOCENTES --- */
 .carrusel-docentes {
   position: relative;
   flex-grow: 1;
-  display: flex; /* Para centrar mensaje de 'sin resultados' */
-  align-items: center; /* Para centrar mensaje de 'sin resultados' */
+  display: flex;
+  align-items: center;
 }
 .carrusel__tarjetas {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); /* Minmax un poco mayor */
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
   gap: var(--grid-gap, 20px);
-  padding: 10px 0; /* Padding solo vertical */
-  width: 100%; /* Ocupa todo el ancho del contenedor .carrusel-docentes */
+  padding: 10px 0;
+  width: 100%;
 }
 .sin-resultados-docentes {
     width: 100%;
@@ -230,7 +229,7 @@
     background-color: var(--color-menu-background);
     color: var(--text-color-muted);
     border-color: rgba(var(--text-color-light-rgb,255,255,255),0.1);
-    transform: translateY(-50%); /* Resetear scale en disabled */
+    transform: translateY(-50%);
 }
 .carrusel__boton--anterior { left: -22px; }
 .carrusel__boton--siguiente { right: -22px; }
@@ -242,83 +241,72 @@
   padding: var(--padding-tarjeta-docente, 20px);
   display: flex;
   align-items: flex-start;
-  position: relative;
+  position: relative; /* Necesario para posicionar la etiqueta 'Destacado' */
   color: var(--text-color-light);
   transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease-out;
   border: 1px solid var(--color-tarjeta-borde-sutil);
+  min-height: 180px; 
 }
 .tarjeta-docente:hover {
     transform: translateY(-4px) scale(1.01);
     box-shadow: 0 6px 20px rgba(0,0,0,0.25);
     border-color: var(--color-tuttor-up-green);
 }
+
+/* AJUSTE: Posicionamiento de la etiqueta "Destacado" */
 .tarjeta__etiqueta-docente {
   position: absolute;
-  top: var(--etiqueta-destacado-top, 15px);
-  left: var(--etiqueta-destacado-left, 15px);
+  top: 10px;  /* Distancia desde arriba */
+  right: 10px; /* Distancia desde la derecha */
+  /* Si prefieres arriba a la izquierda: */
+  /* top: var(--etiqueta-destacado-top, 15px); */
+  /* left: var(--etiqueta-destacado-left, 15px); */
   background: var(--color-tuttor-up-green);
   color: var(--text-color-dark);
-  font-size: .75rem;
-  padding: 4px 10px;
-  border-radius: 15px;
+  font-size: .7rem;
+  padding: 3px 8px;
+  border-radius: 12px;
   font-weight: 500;
-  z-index: 1;
+  z-index: 2; /* Asegurar que esté sobre la imagen si hay algún solapamiento mínimo */
 }
+
 .tarjeta__imagen-docente {
   width: var(--tamano-imagen-docente, 120px);
   height: var(--tamano-imagen-docente, 120px);
   border-radius: 50%;
   object-fit: cover;
-  margin-right: 20px;
+  margin-right: var(--padding-tarjeta-docente, 20px); /* Usar el mismo valor que el padding de la tarjeta para un espaciado consistente */
   border: 3px solid var(--color-background);
   box-shadow: 0 0 0 2px var(--color-tuttor-up-green);
   flex-shrink: 0;
+  position: relative; /* No es estrictamente necesario ahora con la etiqueta en la esquina de la tarjeta */
+  z-index: 1;
 }
-.tarjeta__contenido-docente { flex: 1; }
-.tarjeta__titulo-docente { margin-top: 5px; margin-bottom: 10px; font-size: 1.25rem; color: var(--text-color-light); font-weight: 600;}
+.tarjeta__contenido-docente { 
+  flex: 1; 
+  /* No necesita padding-top si la etiqueta se posiciona en la esquina de .tarjeta-docente */
+}
+.tarjeta__titulo-docente { 
+  margin-top: 0; 
+  margin-bottom: 10px; 
+  font-size: 1.25rem; 
+  color: var(--text-color-light); 
+  font-weight: 600;
+}
 .tarjeta__valoracion-docente { display: flex; align-items: center; margin-bottom: 10px; }
 .tarjeta__icono-valoracion-star { margin-right: 3px; color: var(--color-tuttor-up-green); font-size: .9rem; }
 .tarjeta__texto-valoracion-docente { margin-left: 8px; font-size: .8rem; color: var(--text-color-muted); }
 .tarjeta__precio-docente,
 .tarjeta__experiencia-docente { font-size: .9rem; margin-bottom: 8px; color: var(--text-color-light); display: flex; align-items: center; }
 .tarjeta__experiencia-docente .fas.fa-award { margin-right: 8px; color: var(--text-color-muted); font-size: 1.1em; }
-.tarjeta__boton-agenda {
-  margin-top: 15px;
-  display: inline-block;
-  padding: 9px 18px;
-  border: 2px solid var(--color-tuttor-up-green);
-  border-radius: 25px;
-  color: var(--color-tuttor-up-green);
-  text-decoration: none;
-  font-size: .9rem;
-  transition: background .2s, color .2s;
-  font-weight: 500;
-}
+.tarjeta__boton-agenda { margin-top: 15px; display: inline-block; padding: 9px 18px; border: 2px solid var(--color-tuttor-up-green); border-radius: 25px; color: var(--color-tuttor-up-green); text-decoration: none; font-size: .9rem; transition: background .2s, color .2s; font-weight: 500; }
 .tarjeta__boton-agenda:hover { background: var(--color-tuttor-up-green); color: var(--text-color-dark); }
 
 /* --- VISTA DE RESERVA (DENTRO DE LA PÁGINA DE DOCENTES) --- */
 .reserva-vista-visible { display: block !important; }
 .reserva-vista-oculta { display: none; }
-#reserva-container-docentes {
-  padding: 20px;
-  background-color: var(--color-background);
-  border-radius: 8px;
-  margin-top: 20px;
-  border: 1px solid var(--color-menu-background);
-}
-.boton-volver-docentes {
-    display: inline-flex; align-items: center; gap: 8px;
-    margin-bottom: 20px;
-    padding: 10px 20px;
-    background: var(--color-tuttor-up-green);
-    color: var(--text-color-dark);
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    font-weight: 500;
-    text-decoration: none;
-    transition: background-color 0.2s ease;
-}
+#reserva-container-docentes { padding: 20px; background-color: var(--color-background); border-radius: 8px; margin-top: 20px; border: 1px solid var(--color-menu-background); }
+.boton-volver-docentes { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; padding: 10px 20px; background: var(--color-tuttor-up-green); color: var(--text-color-dark); border: none; border-radius: 25px; cursor: pointer; font-weight: 500; text-decoration: none; transition: background-color 0.2s ease; }
 .boton-volver-docentes:hover { background-color: #5ce1e6; }
 .reserva-contenido { display: flex; width: 100%; padding: 0; gap: 30px; }
 .reserva-perfil { flex: 0 0 300px; text-align: center; padding: 20px; background-color: var(--color-tarjeta-fondo-general); border-radius: 8px; }
@@ -355,15 +343,15 @@
 .modal-horarios .boton-modal#confirmEliminarDocente { border-color: #e74c3c; color: #e74c3c; }
 .modal-horarios .boton-modal#confirmEliminarDocente:hover { background-color: #e74c3c; color: var(--text-color-light); }
 
-/* --- RESPONSIVE PARA DOCENTES (Complementa estilos_globales.css) --- */
-@media (max-width: 992px) { /* Tablets y pantallas medianas */
+/* --- RESPONSIVE PARA DOCENTES --- */
+@media (max-width: 992px) {
     .vista-docentes-wrapper {
         flex-direction: column;
     }
     .barra-lateral-filtros-docentes {
         width: 100%;
         margin-right: 0;
-        margin-bottom: 25px; /* Aumentado espacio */
+        margin-bottom: 25px;
         height: auto;
     }
     .reserva-contenido {
@@ -373,29 +361,29 @@
     .reserva-perfil, .reserva-calendario-contenedor {
         flex-basis: auto;
         width: 100%;
-        max-width: 550px; /* Límite para que no se estire demasiado */
+        max-width: 550px;
     }
     .carrusel__tarjetas {
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     }
-    .carrusel__boton--anterior { left: 5px; } /* Ajustar posición para que no se salga tanto */
+    .carrusel__boton--anterior { left: 5px; }
     .carrusel__boton--siguiente { right: 5px; }
 }
 
-@media (max-width: 768px) { /* Tablet Portrait / Large Mobile */
+@media (max-width: 768px) {
     .barra-superior-docentes {
-        flex-direction: column; /* Apilar título y botones */
-        align-items: flex-start; /* Alinear a la izquierda */
+        flex-direction: column;
+        align-items: flex-start;
         gap: 10px;
     }
     .barra-superior__titulo-docentes {
-        font-size: 1.8rem; /* Más pequeño */
+        font-size: 1.8rem;
     }
     .carrusel-docentes {
-        padding: 0; /* Sin padding lateral para que los botones queden pegados si es necesario */
+        padding: 0;
     }
     .carrusel__boton {
-        width: 40px; /* Ajustado */
+        width: 40px;
         height: 40px;
         font-size: 1rem;
     }
@@ -410,6 +398,12 @@
     .tarjeta__titulo-docente {
         font-size: 1.1rem;
     }
+    /* AJUSTE: El padding de la tarjeta de docente debe ser consistente con el tamaño de imagen más grande */
+    .tarjeta-docente {
+        /* Si --tamano-imagen-docente es 120px y el padding de la tarjeta es 20px, 
+           y la imagen tiene margin-right: 20px, todo debería encajar bien.
+           No se necesita ajuste de padding aquí si las variables son consistentes. */
+    }
     .reserva-imagen {
         width: 150px;
         height: 150px;
@@ -422,9 +416,9 @@
     }
 }
 
-@media (max-width: 480px) { /* Móviles muy pequeños */
+@media (max-width: 480px) {
     .carrusel__tarjetas {
-        grid-template-columns: 1fr; /* Una tarjeta por fila */
+        grid-template-columns: 1fr;
     }
     .barra-lateral-filtros-docentes .barra-lateral__busqueda { 
         flex-direction: column; 
@@ -442,8 +436,15 @@
         padding: 12px 15px;
         border: 1px solid rgba(var(--text-color-light-rgb, 255,255,255), 0.1);
     }
+    /* Ocultar el botón de búsqueda explícito en móvil si el input ya es ancho completo */
+    .barra-lateral-filtros-docentes .barra-lateral__boton-busqueda {
+        /* display: none; Opcional si no lo usas */
+        width: 100%; /* Si lo mantienes, que ocupe el ancho */
+        margin-left: 0;
+        margin-top: 10px; /* Espacio si está debajo del input */
+    }
     .barra-lateral-filtros-docentes .barra-lateral__icono-busqueda { 
-        display: none; 
+        display: none; /* Ya no se usa si la lupa está en el botón */
     }
     .modal-horarios .horarios-grid { 
         grid-template-columns: 1fr; 
@@ -462,10 +463,10 @@
         font-size: 1.6rem;
     }
     .reserva-perfil, .reserva-calendario-contenedor {
-        padding: 15px; /* Menos padding en móviles */
+        padding: 15px;
     }
     .dia-calendario {
-        min-height: 45px; /* Aún más pequeños los días */
+        min-height: 45px;
         font-size: 0.8rem;
     }
     .dia-calendario span {
