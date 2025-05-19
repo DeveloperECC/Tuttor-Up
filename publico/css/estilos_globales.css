@@ -343,10 +343,10 @@ body::before {
   margin-left: auto; margin-right: auto;
   position: relative; z-index: 2;
 }
-.materia-card.calculo    { grid-column: 1 / span 3; grid-row: 1 /  2; }
-.materia-card.fisica     { grid-column: 4 / span 3; grid-row: 1 / 2; }
+.materia-card.calculo    { grid-column: 1 / span 4; grid-row: 1 / span 2; }
+.materia-card.fisica     { grid-column: 5 / span 2; grid-row: 1 / 2; }
 .materia-card.matematicas { grid-column: 7 / span 4; grid-row: 1 / 2; }
-.materia-card.quimica    { grid-column: 4 / span 3; grid-row: 2 / 3; }
+.materia-card.quimica    { grid-column: 5 / span 3; grid-row: 2 / 2; }
 
 .materia-card {
   text-decoration: none;
@@ -363,7 +363,7 @@ body::before {
   width: 100%;
   color: var(--text-color-light);
   text-align: left;
-  /* Para el look del Mockup (segunda imagen que mostraste): */
+  
   /* background-color: var(--color-tarjeta-fondo-general); */ /* Comentado para usar colores específicos */
   /* border-left-width: 5px; */
   /* border-left-style: solid; */
@@ -530,4 +530,29 @@ body::before {
     .btn-hero-accion { padding: 12px 20px; font-size: 0.9rem; }
     .acciones-rapidas-inicio { flex-direction: column; align-items: center; }
     .accion-rapida-card { width: 80%; max-width: 280px; }
+}
+/* En publico/css/estilos_globales.css, puedes añadir esto al final o en la sección del header */
+.header .right-icons .user-greeting {
+    color: var(--text-color-muted);
+    margin-right: 0.75rem;
+    font-size: 0.9rem;
+}
+.header .right-icons .auth-button {
+    /* background-color: var(--color-tuttor-up-green); */
+    /* color: var(--text-color-dark); */
+    /* padding: 0.4rem 0.8rem; */
+    /* border-radius: 5px; */
+    /* text-decoration: none; */
+    /* font-weight: 500; */
+    /* font-size: 0.9rem; */
+    /* display: inline-flex; */
+    /* align-items: center; */
+}
+.header .right-icons .auth-button .auth-button-text {
+    font-size: 0.9rem;
+    margin-left: 0.3rem;
+    font-weight: 500; /* Para que coincida con "AR" */
+}
+.header .right-icons .auth-button:hover {
+    /* background-color: #65d8c0; */
 }

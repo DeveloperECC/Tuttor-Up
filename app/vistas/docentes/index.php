@@ -109,7 +109,7 @@ $materia_filtrada_json = isset($datos_vista['materia_filtrada']) ? json_encode($
       <span class="cerrar-modal" id="closeModalHorariosDocentes">×</span>
       <h2>Selecciona un horario</h2>
       <div class="horarios-grid">
-        <button class="boton-horario">10AM - 11AM</button>
+        <button class="boton-horario">2025-05-20</button>
         <button class="boton-horario">11AM - 12PM</button>
         <button class="boton-horario">12PM - 1PM</button>
         <button class="boton-horario">1PM - 2PM</button>

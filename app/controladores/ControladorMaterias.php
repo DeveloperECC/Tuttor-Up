@@ -36,13 +36,11 @@ class ControladorMaterias {
         require_once ROOT_PATH . '/app/modelos/ModeloMaterias.php';
         $modelo = new ModeloMaterias();
         
-        // Nombres de las 4 materias principales en el orden visual deseado para el mockup
         $materiasPrincipalesNombres = ['Cálculo', 'Física', 'Matemáticas', 'Química'];
         $materias_raw = $modelo->obtenerTodasLasMaterias();
          
         $materias_data_vista = [];
 
-        // Descripciones específicas como en el mockup para las materias principales
         $descripciones_mockup = [
             'Cálculo' => 'El fascinante mundo del cambio y sus aplicaciones fundamentales.',
             'Física' => 'Entiende las leyes que rigen el universo y sus fenómenos.',
@@ -54,13 +52,23 @@ class ControladorMaterias {
             if (in_array($m['nombre'], $materiasPrincipalesNombres)) {
                 
                 $nombre_limpio_url = strtolower($m['nombre']);
-                $nombre_limpio_url = iconv('UTF-8', 'ASCII//TRANSLIT', $nombre_limpio_url);
+                // Normalización para URL más robusta
+                if (function_exists('iconv')) {
+                    $nombre_temp = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $nombre_limpio_url);
+                    if ($nombre_temp !== false) $nombre_limpio_url = $nombre_temp;
+                }
                 $nombre_limpio_url = preg_replace('/[^a-z0-9\s-]/', '', $nombre_limpio_url);
                 $nombre_limpio_url = preg_replace('/\s+/', '-', $nombre_limpio_url);
                 $nombre_limpio_url = trim($nombre_limpio_url, '-');
 
-                $clase_css_tarjeta = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $m['nombre']));
+                $clase_css_tarjeta = ''; // Regenerar si es necesario
+                if (function_exists('iconv')) {
+                    $clase_css_tarjeta = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $m['nombre']));
+                } else {
+                    $clase_css_tarjeta = strtolower($m['nombre']);
+                }
                 $clase_css_tarjeta = preg_replace('/[^a-z0-9]/', '', $clase_css_tarjeta);
+
 
                 $materias_data_vista[] = [
                     'id' => $m['id'],
@@ -83,49 +91,97 @@ class ControladorMaterias {
         $datos_layout['metodo_actual'] = 'index';
         $datos_layout['datos_vista'] = [
             'materias_data' => $materias_data_vista,
-            'termino_busqueda' => null // <--- AJUSTE AQUÍ: Añadido para evitar el warning en la vista
+            'termino_busqueda' => null
         ];
-
+        // MODIFICACIÓN: Mostrar buscador del header en la página principal de materias también
+        $datos_layout['mostrar_buscador_header'] = true; 
         $this->cargarLayout(ROOT_PATH . '/app/vistas/materias/index.php', $datos_layout);
     }
 
+    /**
+     * Método invocado por la búsqueda del header.
+     * Intenta encontrar una materia por el término de búsqueda.
+     * Si la encuentra, redirige a la vista de docentes filtrados por esa materia.
+     * Si no, muestra una lista de materias que coincidan parcialmente con el término.
+     */
     public function buscar() {
-        require_once ROOT_PATH . '/app/modelos/ModeloMaterias.php';
-        $modelo = new ModeloMaterias();
-        $termino = $_GET['q'] ?? '';
-        $materias_raw = $modelo->buscarMaterias($termino);
+        $termino = trim($_GET['q'] ?? ''); // Obtener y limpiar término de búsqueda
 
-        $materias_data_vista = [];
-         foreach ($materias_raw as $m) {
-            $nombre_limpio_url = strtolower($m['nombre']);
-            $nombre_limpio_url = iconv('UTF-8', 'ASCII//TRANSLIT', $nombre_limpio_url);
-            $nombre_limpio_url = preg_replace('/[^a-z0-9\s-]/', '', $nombre_limpio_url);
-            $nombre_limpio_url = preg_replace('/\s+/', '-', $nombre_limpio_url);
-            $nombre_limpio_url = trim($nombre_limpio_url, '-');
-
-            $clase_css_tarjeta = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $m['nombre']));
-            $clase_css_tarjeta = preg_replace('/[^a-z0-9]/', '', $clase_css_tarjeta);
-
-            $materias_data_vista[] = [
-                'id' => $m['id'],
-                'codigo_html' => $this->generarCodigoHtmlMateria($m['nombre']),
-                'nombre' => $m['nombre'],
-                'descripcion' => 'Información sobre ' . $m['nombre'] . '.', 
-                'clase_css' => $clase_css_tarjeta,
-                'icono_fa' => $m['icono'] ?? 'fas fa-search',
-                'accion_url' => '/docentes/filtrarPorMateria/' . $nombre_limpio_url 
-            ];
+        if (empty($termino)) {
+            // Si no hay término de búsqueda, redirigir a la página principal de materias
+            header('Location: ' . BASE_URL . '/materias');
+            exit();
         }
 
-        $datos_layout['titulo_pagina'] = "Resultados para: " . htmlspecialchars($termino);
-        $datos_layout['controlador_actual'] = 'ControladorMaterias';
-        $datos_layout['metodo_actual'] = 'buscar';
-        $datos_layout['datos_vista'] = [
-            'materias_data' => $materias_data_vista,
-            'termino_busqueda' => $termino // Aquí sí se define con el valor de la búsqueda
-        ];
+        require_once ROOT_PATH . '/app/modelos/ModeloMaterias.php';
+        $modeloMaterias = new ModeloMaterias();
+        
+        // Usar el método obtenerMateriaPorNombreFlexible que busca coincidencias exactas y luego parciales
+        $materiaEncontrada = $modeloMaterias->obtenerMateriaPorNombreFlexible($termino);
 
-        $this->cargarLayout(ROOT_PATH . '/app/vistas/materias/index.php', $datos_layout);
+        if ($materiaEncontrada) {
+            // Si se encuentra una materia (exacta o la primera parcial), construir la URL para filtrar docentes
+            $nombreMateriaUrl = strtolower($materiaEncontrada['nombre']);
+            // Normalizar para URL (quitar acentos, reemplazar espacios con guiones, etc.)
+            if (function_exists('iconv')) {
+                $nombre_temp = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $nombreMateriaUrl);
+                if ($nombre_temp !== false) $nombreMateriaUrl = $nombre_temp;
+            }
+            $nombreMateriaUrl = preg_replace('/[^a-z0-9\s-]/', '', $nombreMateriaUrl); // Permitir guiones
+            $nombreMateriaUrl = preg_replace('/\s+/', '-', $nombreMateriaUrl);       // Espacios a guiones
+            $nombreMateriaUrl = trim($nombreMateriaUrl, '-');                       // Quitar guiones al inicio/final
+
+            // Redirigir a la vista de docentes filtrados por esta materia
+            header('Location: ' . BASE_URL . '/docentes/filtrarPorMateria/' . $nombreMateriaUrl);
+            exit();
+        } else {
+            // Si no se encuentra una materia específica por nombre (ni exacta ni parcial directa),
+            // entonces buscamos todas las materias que podrían coincidir parcialmente para listarlas.
+            // Esto mantiene la funcionalidad original de la vista de búsqueda de materias si no hay un match directo.
+            $materiasCoincidentes = $modeloMaterias->buscarMaterias($termino); // Este método ya es flexible
+            $materias_data_vista = [];
+
+            foreach ($materiasCoincidentes as $m) {
+                $nombre_limpio_url_materia = strtolower($m['nombre']);
+                if (function_exists('iconv')) {
+                    $nombre_temp_materia = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $nombre_limpio_url_materia);
+                    if ($nombre_temp_materia !== false) $nombre_limpio_url_materia = $nombre_temp_materia;
+                }
+                $nombre_limpio_url_materia = preg_replace('/[^a-z0-9\s-]/', '', $nombre_limpio_url_materia);
+                $nombre_limpio_url_materia = preg_replace('/\s+/', '-', $nombre_limpio_url_materia);
+                $nombre_limpio_url_materia = trim($nombre_limpio_url_materia, '-');
+
+                $clase_css_tarjeta = '';
+                if (function_exists('iconv')) {
+                    $clase_css_tarjeta = strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $m['nombre']));
+                } else {
+                    $clase_css_tarjeta = strtolower($m['nombre']);
+                }
+                $clase_css_tarjeta = preg_replace('/[^a-z0-9]/', '', $clase_css_tarjeta);
+
+                $materias_data_vista[] = [
+                    'id' => $m['id'],
+                    'codigo_html' => $this->generarCodigoHtmlMateria($m['nombre']),
+                    'nombre' => $m['nombre'],
+                    'descripcion' => 'Información sobre ' . htmlspecialchars($m['nombre']) . '.', 
+                    'clase_css' => $clase_css_tarjeta,
+                    'icono_fa' => $m['icono'] ?? 'fas fa-search',
+                    'accion_url' => '/docentes/filtrarPorMateria/' . $nombre_limpio_url_materia 
+                ];
+            }
+
+            // Cargar la vista de materias (que mostrará las coincidencias o un mensaje de "no encontrado")
+            $datos_layout['titulo_pagina'] = "Resultados de Búsqueda para: \"" . htmlspecialchars($termino) . "\"";
+            $datos_layout['controlador_actual'] = 'ControladorMaterias';
+            $datos_layout['metodo_actual'] = 'buscar'; 
+            $datos_layout['datos_vista'] = [
+                'materias_data' => $materias_data_vista, 
+                'termino_busqueda' => $termino
+            ];
+            // MODIFICACIÓN: Mostrar buscador del header en la página de resultados de búsqueda también
+            $datos_layout['mostrar_buscador_header'] = true; 
+            $this->cargarLayout(ROOT_PATH . '/app/vistas/materias/index.php', $datos_layout);
+        }
     }
 
     private function mostrarMateriaEspecificaPorUrl($nombreMateriaUrl) {
@@ -133,15 +189,14 @@ class ControladorMaterias {
         $modelo = new ModeloMaterias();
         $nombreMateriaOriginal = ucwords(str_replace('-', ' ', $nombreMateriaUrl));
         
-        $datosMateria = $modelo->obtenerMateriaPorNombre($nombreMateriaOriginal);
+        // Usar el método que ya normaliza internamente para obtener el detalle
+        $datosMateria = $modelo->obtenerMateriaPorNombre($nombreMateriaOriginal); 
 
         $datos_layout['controlador_actual'] = 'ControladorMaterias';
-        $datos_layout['metodo_actual'] = $nombreMateriaUrl;
+        $datos_layout['metodo_actual'] = $nombreMateriaUrl; // Para marcar activo el menú si es necesario
         $datos_layout['datos_vista']['materia'] = $datosMateria;
-        // Para la vista de detalle, no necesitamos 'termino_busqueda' explícitamente
-        // a menos que el layout_principal lo requiera siempre. Si es así, añádelo como null.
-        // $datos_layout['datos_vista']['termino_busqueda'] = null; 
-
+        // MODIFICACIÓN: Mostrar buscador del header en la página de detalle de materia
+        $datos_layout['mostrar_buscador_header'] = true; 
 
         if ($datosMateria) {
             $datos_layout['titulo_pagina'] = "Detalle: " . htmlspecialchars($datosMateria['nombre']);

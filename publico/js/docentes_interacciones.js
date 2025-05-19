@@ -5,6 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('teachersDataFromPHP no está definido. Asegúrate de pasarlo desde PHP en la vista docentes/index.php.');
         return;
     }
+    if (typeof ASSETS_URL === 'undefined' || typeof BASE_URL === 'undefined') {
+        console.error('ASSETS_URL o BASE_URL no están definidos. Asegúrate de que existen en el scope global (layout_principal.php).');
+        return;
+    }
+
 
     const allTeachersOriginal = teachersDataFromPHP;
     let currentFilteredTeachers = allTeachersOriginal.slice();
@@ -18,9 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const volverADocentesBtn = document.getElementById('volver-a-docentes-btn');
     const modalHorarios = document.getElementById('horarioModalDocentes');
     const closeModalHorariosBtn = document.getElementById('closeModalHorariosDocentes');
-    const horarioBtns = modalHorarios ? modalHorarios.querySelectorAll('.boton-horario') : [];
+    const horarioBtnsContainer = modalHorarios ? modalHorarios.querySelector('.horarios-grid') : null; // Contenedor de botones de horario
     const confirmReservarBtn = document.getElementById('confirmReservarDocente');
-    const confirmEliminarBtn = document.getElementById('confirmEliminarDocente');
+    const confirmEliminarBtn = document.getElementById('confirmEliminarDocente'); // No se usa para crear reserva
     const subjectTitleDocentes = document.getElementById('subject-title-docentes');
     const filterMateriaCheckboxes = document.querySelectorAll('.filtro-materia');
     const filterRatingRadios = document.querySelectorAll('.filtro-rating');
@@ -28,9 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const prevButton = document.querySelector('.carrusel-docentes .carrusel__boton--anterior');
     const nextButton = document.querySelector('.carrusel-docentes .carrusel__boton--siguiente');
 
-    let diaSeleccionadoParaReserva = null;
+    let diaSeleccionadoParaReserva = null; // Guarda el objeto Date completo del día seleccionado
     let docenteSeleccionadoParaReserva = null;
-    const bookings = {};
+    // const bookings = {}; // Ya no necesitamos bookings local, se consultará al backend
 
     // --- FUNCIONES HELPER ---
     function normalizarTexto(texto) {
@@ -65,6 +70,8 @@ document.addEventListener('DOMContentLoaded', () => {
             card.appendChild(tag);
         }
         const imagePath = teacher.full_img_path || (ASSETS_URL + '/imagenes/' + teacher.img);
+        // Asegurarse que teacher.price es un número antes de usar toLocaleString
+        const price = typeof teacher.price === 'number' ? teacher.price.toLocaleString() : (teacher.price || 'N/A');
         card.innerHTML = `
             <img src="${imagePath}" alt="Foto de ${teacher.name}" class="tarjeta__imagen-docente">
             <div class="tarjeta__contenido-docente">
@@ -73,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     ${renderStarRating(teacher.rating)}
                     <span class="tarjeta__texto-valoracion-docente">${teacher.opinions} opiniones</span>
                 </div>
-                <div class="tarjeta__precio-docente">$${teacher.price.toLocaleString()} COP</div>
+                <div class="tarjeta__precio-docente">$${price} COP</div>
                 <div class="tarjeta__experiencia-docente">
                     <i class="fas fa-award"></i>${teacher.experience} años de experiencia
                 </div>
@@ -119,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-    
+
     function updatePaginationButtons() {
         if (!prevButton || !nextButton) return;
         const totalPages = Math.ceil(currentFilteredTeachers.length / cardsPerPage);
@@ -147,6 +154,8 @@ document.addEventListener('DOMContentLoaded', () => {
         carruselDocentesSection.style.display = 'none';
         const barraSuperior = document.querySelector('.barra-superior-docentes');
         if (barraSuperior) barraSuperior.style.display = 'none';
+        const filtrosAside = document.getElementById('filtrosDocentes');
+        if (filtrosAside) filtrosAside.style.display = 'none';
         
         reservaContainer.classList.remove('reserva-vista-oculta');
         reservaContainer.classList.add('reserva-vista-visible');
@@ -161,103 +170,183 @@ document.addEventListener('DOMContentLoaded', () => {
         carruselDocentesSection.style.display = 'block'; // o 'flex' si el carrusel es flex
         const barraSuperior = document.querySelector('.barra-superior-docentes');
         if (barraSuperior) barraSuperior.style.display = 'flex';
+        const filtrosAside = document.getElementById('filtrosDocentes');
+        if (filtrosAside) filtrosAside.style.display = 'block'; // o 'flex'
+
         docenteSeleccionadoParaReserva = null;
+        if (modalHorarios) modalHorarios.style.display = 'none';
     }
     volverADocentesBtn?.addEventListener('click', ocultarVistaReserva);
 
     // --- CALENDARIO Y MODAL DE HORARIOS ---
     function generarCalendario() {
         const calendarioDiv = document.getElementById('calendario-docente');
-        if (!calendarioDiv || !docenteSeleccionadoParaReserva) return; // Asegurar que hay un docente seleccionado
-        calendarioDiv.innerHTML = '';
-        const fecha = new Date();
-        const mesActual = fecha.getMonth();
-        const añoActual = fecha.getFullYear();
-        const primerDiaDelMes = new Date(añoActual, mesActual, 1).getDay();
+        if (!calendarioDiv) return;
+        calendarioDiv.innerHTML = ''; // Limpiar calendario
+        const hoy = new Date();
+        const mesActual = hoy.getMonth();
+        const añoActual = hoy.getFullYear();
+    
+        // Primer día del mes y número de días en el mes
+        const primerDiaObj = new Date(añoActual, mesActual, 1);
+        const primerDiaSemana = primerDiaObj.getDay(); // 0 (Dom) - 6 (Sáb)
         const diasEnMes = new Date(añoActual, mesActual + 1, 0).getDate();
-
-        for (let i = 0; i < primerDiaDelMes; i++) {
+    
+        // Rellenar días vacíos al inicio del mes
+        for (let i = 0; i < primerDiaSemana; i++) {
             const diaVacio = document.createElement('div');
             diaVacio.className = 'dia-calendario dia-vacio';
             calendarioDiv.appendChild(diaVacio);
         }
+    
+        // Generar días del mes
         for (let dia = 1; dia <= diasEnMes; dia++) {
             const diaElem = document.createElement('div');
+            const fechaDiaActual = new Date(añoActual, mesActual, dia);
+            
             diaElem.className = 'dia-calendario';
-            diaElem.dataset.dia = dia;
-            diaElem.innerHTML = `<span>${dia}</span>`;
-            const bookingKey = `${docenteSeleccionadoParaReserva.id}-${dia}`;
-            if (bookings[bookingKey]) {
-                diaElem.classList.add('disponible');
+            // Solo permitir seleccionar días desde hoy en adelante
+            if (fechaDiaActual < hoy && fechaDiaActual.toDateString() !== hoy.toDateString()) {
+                diaElem.classList.add('dia-pasado');
+            } else {
+                diaElem.addEventListener('click', () => abrirModalHorarios(fechaDiaActual));
             }
-            diaElem.addEventListener('click', () => abrirModalHorarios(dia));
+            diaElem.dataset.fecha = fechaDiaActual.toISOString().split('T')[0]; // YYYY-MM-DD
+            diaElem.innerHTML = `<span>${dia}</span>`;
             calendarioDiv.appendChild(diaElem);
         }
     }
+    
+    async function abrirModalHorarios(fechaObj) {
+        if (!modalHorarios || !docenteSeleccionadoParaReserva || !horarioBtnsContainer) return;
+        
+        diaSeleccionadoParaReserva = fechaObj; // Guardar el objeto Date
+        const fechaFormatoAPI = fechaObj.toISOString().split('T')[0]; // YYYY-MM-DD
 
-    function abrirModalHorarios(dia) {
-        if (!modalHorarios || !docenteSeleccionadoParaReserva) return;
-        diaSeleccionadoParaReserva = dia;
-        const bookingKey = `${docenteSeleccionadoParaReserva.id}-${dia}`;
-        const horarioReservado = bookings[bookingKey];
+        // Actualizar título del modal
+        const modalTitle = modalHorarios.querySelector('h2');
+        if(modalTitle) modalTitle.textContent = `Horarios para ${docenteSeleccionadoParaReserva.name} el ${fechaObj.toLocaleDateString()}`;
 
-        horarioBtns.forEach(btn => {
-            btn.classList.remove('seleccionado');
-            btn.disabled = false;
-            if (horarioReservado && btn.textContent.trim() === horarioReservado) {
-                btn.classList.add('seleccionado');
-            }
-        });
-        if (confirmEliminarBtn) confirmEliminarBtn.style.display = horarioReservado ? 'inline-block' : 'none';
+        // Limpiar horarios anteriores y mostrar "cargando"
+        horarioBtnsContainer.innerHTML = '<p>Cargando horarios...</p>';
         modalHorarios.style.display = 'flex';
+
+        try {
+            const response = await fetch(`${BASE_URL}/reservas/horariosOcupados?idDocente=${docenteSeleccionadoParaReserva.id}&fechaTutoria=${fechaFormatoAPI}`);
+            if (!response.ok) {
+                throw new Error(`Error HTTP ${response.status}: ${response.statusText}`);
+            }
+            const data = await response.json();
+
+            if (data.exito && data.horarios) {
+                renderizarBotonesDeHorario(data.horarios);
+            } else {
+                horarioBtnsContainer.innerHTML = `<p>No se pudieron cargar los horarios. ${data.mensaje || ''}</p>`;
+            }
+        } catch (error) {
+            console.error('Error al obtener horarios ocupados:', error);
+            horarioBtnsContainer.innerHTML = `<p>Error al cargar horarios. Intenta de nuevo.</p>`;
+        }
     }
+
+    function renderizarBotonesDeHorario(horariosOcupados) {
+        if (!horarioBtnsContainer) return;
+        horarioBtnsContainer.innerHTML = ''; // Limpiar
+
+        // Definir los bloques horarios disponibles estándar para un docente
+        const bloquesDisponibles = [
+            "08:00 AM - 09:00 AM", "09:00 AM - 10:00 AM", "10:00 AM - 11:00 AM",
+            "11:00 AM - 12:00 PM", "01:00 PM - 02:00 PM", "02:00 PM - 03:00 PM",
+            "03:00 PM - 04:00 PM", "04:00 PM - 05:00 PM", "05:00 PM - 06:00 PM"
+        ];
+
+        if (bloquesDisponibles.length === 0) {
+            horarioBtnsContainer.innerHTML = "<p>No hay horarios configurados para este día.</p>";
+            return;
+        }
+
+        let algunHorarioLibre = false;
+        bloquesDisponibles.forEach(bloque => {
+            const btn = document.createElement('button');
+            btn.className = 'boton-horario';
+            btn.textContent = bloque;
+            if (horariosOcupados.includes(bloque)) {
+                btn.disabled = true;
+                btn.title = "Horario no disponible";
+            } else {
+                algunHorarioLibre = true;
+                btn.addEventListener('click', () => {
+                    // Deseleccionar otros y seleccionar este
+                    horarioBtnsContainer.querySelectorAll('.boton-horario.seleccionado').forEach(b => b.classList.remove('seleccionado'));
+                    btn.classList.add('seleccionado');
+                });
+            }
+            horarioBtnsContainer.appendChild(btn);
+        });
+        if (!algunHorarioLibre && bloquesDisponibles.length > 0) {
+             horarioBtnsContainer.innerHTML = "<p>No hay horarios disponibles para este día.</p>";
+        }
+    }
+
 
     function cerrarModalHorarios() {
         if (!modalHorarios) return;
         modalHorarios.style.display = 'none';
-        // diaSeleccionadoParaReserva = null; // No resetear aquí, se usa al confirmar
+        // diaSeleccionadoParaReserva se mantiene para la confirmación
     }
 
     closeModalHorariosBtn?.addEventListener('click', cerrarModalHorarios);
     window.addEventListener('click', (event) => { if (modalHorarios && event.target === modalHorarios) cerrarModalHorarios(); });
 
-    horarioBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            if (btn.classList.contains('seleccionado')) {
-                 btn.classList.remove('seleccionado');
-            } else {
-                horarioBtns.forEach(b => b.classList.remove('seleccionado'));
-                btn.classList.add('seleccionado');
-            }
-        });
-    });
+    // ELIMINADO: Event listener para horarioBtns aquí, se añaden dinámicamente en renderizarBotonesDeHorario
 
-    confirmReservarBtn?.addEventListener('click', () => {
-        const selectedHorarioBtn = modalHorarios ? modalHorarios.querySelector('.boton-horario.seleccionado') : null;
+    // ***** MODIFICACIÓN IMPORTANTE AQUÍ *****
+    confirmReservarBtn?.addEventListener('click', async () => {
+        const selectedHorarioBtn = horarioBtnsContainer ? horarioBtnsContainer.querySelector('.boton-horario.seleccionado') : null;
+        
         if (!docenteSeleccionadoParaReserva || !diaSeleccionadoParaReserva || !selectedHorarioBtn) {
             alert('Por favor, selecciona un docente, un día y un horario.');
             return;
         }
+
         const horario = selectedHorarioBtn.textContent.trim();
-        const bookingKey = `${docenteSeleccionadoParaReserva.id}-${diaSeleccionadoParaReserva}`;
-        bookings[bookingKey] = horario;
-        alert(`Reserva confirmada con ${docenteSeleccionadoParaReserva.name} el día ${diaSeleccionadoParaReserva} de ${horario}.`);
-        const diaElemCalendario = document.querySelector(`.dia-calendario[data-dia="${diaSeleccionadoParaReserva}"]`);
-        if (diaElemCalendario) diaElemCalendario.classList.add('disponible');
-        cerrarModalHorarios();
-    });
-    
-    confirmEliminarBtn?.addEventListener('click', () => {
-        if (!docenteSeleccionadoParaReserva || !diaSeleccionadoParaReserva) return;
-        const bookingKey = `${docenteSeleccionadoParaReserva.id}-${diaSeleccionadoParaReserva}`;
-        if (bookings[bookingKey]) {
-            delete bookings[bookingKey];
-            alert('Reserva eliminada.');
-            const diaElemCalendario = document.querySelector(`.dia-calendario[data-dia="${diaSeleccionadoParaReserva}"]`);
-            if (diaElemCalendario) diaElemCalendario.classList.remove('disponible');
+        const fechaTutoria = diaSeleccionadoParaReserva.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+        const idDocente = docenteSeleccionadoParaReserva.id;
+        const materiaDocente = docenteSeleccionadoParaReserva.subject; // Materia principal del docente
+
+        const formData = new FormData();
+        formData.append('id_docente', idDocente);
+        formData.append('fecha_tutoria', fechaTutoria);
+        formData.append('bloque_horario', horario);
+        formData.append('materia', materiaDocente);
+
+        try {
+            // console.log('Enviando reserva:', {id_docente: idDocente, fecha_tutoria: fechaTutoria, bloque_horario: horario, materia: materiaDocente});
+            const response = await fetch(`${BASE_URL}/reservas/crear`, {
+                method: 'POST',
+                body: formData
+            });
+            
+            const resultado = await response.json();
+            // console.log('Respuesta del servidor:', resultado);
+
+            if (resultado.exito) {
+                alert(resultado.mensaje + (resultado.id_agendamiento ? ` ID de reserva: R-${resultado.id_agendamiento}` : ''));
+                cerrarModalHorarios();
+                // Opcional: Actualizar el calendario para mostrar este horario como ocupado (si es necesario inmediatamente)
+                // o redirigir a "Mis Agendamientos"
+                window.location.href = `${BASE_URL}/reservas`; // Redirige para ver la reserva
+            } else {
+                alert('Error al reservar: ' + (resultado.mensaje || 'No se pudo completar la reserva.'));
+            }
+        } catch (error) {
+            console.error('Error en la petición de reserva:', error);
+            alert('Ocurrió un error de red al intentar realizar la reserva. Por favor, revisa la consola e inténtalo de nuevo.');
         }
-        cerrarModalHorarios();
     });
+
+    // ELIMINADO: confirmEliminarBtn, ya que este flujo es solo para crear reservas.
+    // La eliminación se manejaría en la vista de "Mis Agendamientos".
 
     // --- FILTROS Y BÚSQUEDA ---
     function updateSubjectTitle() {
@@ -268,7 +357,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (materiasSeleccionadas.length > 1) {
             subjectTitleDocentes.textContent = "VARIAS MATERIAS";
         } else if (materiaFiltradaDesdePHP && !filterMateriaCheckboxes.some(cb => cb.checked)) {
-            // Si vino filtrado por URL y el usuario no ha interactuado aún con los checkboxes de materia
             subjectTitleDocentes.textContent = materiaFiltradaDesdePHP.toUpperCase();
         } else {
             subjectTitleDocentes.textContent = "DOCENTES";
@@ -278,8 +366,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function getFilteredTeachers() {
         let result = allTeachersOriginal.slice();
         const materiasSeleccionadas = Array.from(filterMateriaCheckboxes)
-                                        .filter(checkbox => checkbox.checked)
-                                        .map(cb => normalizarTexto(cb.value));
+                                    .filter(checkbox => checkbox.checked)
+                                    .map(cb => normalizarTexto(cb.value));
 
         const selectedRatingRadio = document.querySelector('.filtro-rating:checked');
         const minRating = selectedRatingRadio ? parseInt(selectedRatingRadio.value, 10) : 0;
@@ -291,7 +379,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 teacher.subject && materiasSeleccionadas.includes(normalizarTexto(teacher.subject))
             );
         } else if (materiaFiltradaDesdePHP && !filterMateriaCheckboxes.some(cb => cb.checked)) {
-            // Aplicar filtro PHP si no hay interacción de usuario con checkboxes de materia
             result = result.filter(teacher => 
                 teacher.subject && normalizarTexto(teacher.subject) === normalizarTexto(materiaFiltradaDesdePHP)
             );
@@ -321,6 +408,10 @@ document.addEventListener('DOMContentLoaded', () => {
     filterMateriaCheckboxes.forEach(input => input.addEventListener('change', applyFiltersAndRender));
     filterRatingRadios.forEach(input => input.addEventListener('change', applyFiltersAndRender));
     docentesSearchInput?.addEventListener('input', applyFiltersAndRender);
+    // El botón de búsqueda explícito ahora se maneja por el input event, o puedes añadir un listener de 'click'
+    const docentesSearchButton = document.getElementById('docentesSearchButton');
+    docentesSearchButton?.addEventListener('click', applyFiltersAndRender);
+
 
     prevButton?.addEventListener('click', () => {
         if (currentPage > 0) {
@@ -348,11 +439,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     checkbox.checked = false; 
                 }
             });
-            // Si se encontró y marcó la materia de PHP, los filtros se aplicarán en applyFiltersAndRender
         }
         applyFiltersAndRender(); 
     }
-
-    // Llamar a la inicialización
-    aplicarFiltrosInicialesPHP();
+    if (cardsContainer && typeof teachersDataFromPHP !== 'undefined' && teachersDataFromPHP.length >= 0) {
+        if(reservaContainer) reservaContainer.classList.add('reserva-vista-oculta');
+        if(modalHorarios) modalHorarios.style.display = 'none';
+        if(confirmEliminarBtn) confirmEliminarBtn.style.display = 'none'; // Ocultar botón de eliminar por defecto
+        
+        aplicarFiltrosInicialesPHP();
+    }
 });

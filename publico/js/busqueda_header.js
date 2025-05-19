@@ -4,9 +4,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchButton = document.getElementById('searchButton');
 
     function realizarBusqueda() {
+        if (!searchInput) return; // Salir si el input no existe en la página
         const termino = searchInput.value.trim();
         if (termino) {
-            // Asumimos que BASE_URL está definido globalmente (desde layout_principal.php)
+            // Asegurarse de que BASE_URL está definido globalmente
+            if (typeof BASE_URL === 'undefined') {
+                console.error('BASE_URL no está definido. La búsqueda no funcionará.');
+                return;
+            }
             window.location.href = `${BASE_URL}/materias/buscar?q=${encodeURIComponent(termino)}`;
         } else {
             // Opcional: mostrar un pequeño feedback si no hay término
@@ -21,25 +26,23 @@ document.addEventListener('DOMContentLoaded', function() {
     if (searchInput) {
         searchInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-                e.preventDefault(); // Prevenir submit de formulario si lo hubiera
+                e.preventDefault(); // Prevenir submit de formulario si el input estuviera en uno
                 realizarBusqueda();
             }
         });
     }
 
-    // Funcionalidad placeholder para otros botones del header
-    const notificationsButton = document.getElementById('notificationsButton');
+    // --- Funcionalidad para otros botones del header ---
+    const notificationsButton = document.getElementById('notificationsButton'); // Asumo que este ID podría existir
     const userProfileButton = document.getElementById('userProfileButton');
-    const arButton = document.getElementById('arButton');
+    const arButton = document.getElementById('arButton'); // Asumo que este ID podría existir
 
-    notificationsButton?.addEventListener('click', () => alert('Funcionalidad de Notificaciones (Pendiente)'));
-    userProfileButton?.addEventListener('click', () => alert('Funcionalidad de Perfil de Usuario (Pendiente)'));
-    arButton?.addEventListener('click', (e) => { window.location.href = `${BASE_URL}/notificaciones`; });
+    // Ejemplo para el botón de notificaciones (si existe)
+    notificationsButton?.addEventListener('click', (e) => {
         e.preventDefault();
-        alert('Funcionalidad de Realidad Aumentada (Pendiente)');
+        // Ejemplo: Redirigir a la página de notificaciones
+        // window.location.href = `${BASE_URL}/notificaciones`; 
+        alert('Funcionalidad de Notificaciones (Pendiente)');
     });
-    userProfileButton?.addEventListener('click', () => {
-    // Ejemplo: Redirigir a la página de perfil del usuario
-    window.location.href = `${BASE_URL}/perfil`; // <--- CAMBIA ESTO SI QUIERES REDIRIGIR
-    // alert('Funcionalidad de Perfil de Usuario (Pendiente)');
+
 });

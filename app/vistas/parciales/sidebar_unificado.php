@@ -31,12 +31,7 @@
                 <a href="<?= BASE_URL ?>/reservas" class="menu-lateral__enlace <?= ($controlador_actual ?? '') === 'ControladorReservas' ? 'menu-lateral__enlace--activo' : '' ?>">
                     <i class="fas fa-calendar-alt menu-lateral__icono"></i><span class="menu-lateral__texto">Agendamientos</span>
                 </a>
-            </li>
-            <li class="menu-lateral__item">
-                <a href="<?= BASE_URL ?>/configuracion" id="enlaceConfiguracion" class="menu-lateral__enlace <?= ($controlador_actual ?? '') === 'ControladorConfiguracion' ? 'menu-lateral__enlace--activo' : '' ?>">
-                    <i class="fas fa-cog menu-lateral__icono"></i><span class="menu-lateral__texto">Configuración</span>
-                </a>
-            </li>
+            
             <li class="menu-lateral__item">
                 <a href="<?= BASE_URL ?>/auth/logout" id="enlaceCerrarSesion" class="menu-lateral__enlace">
                     <i class="fas fa-sign-out-alt menu-lateral__icono"></i><span class="menu-lateral__texto">Cerrar Sesión</span>

@@ -23,14 +23,11 @@ $subtitulo_bienvenida = $datos_vista['subtitulo_bienvenida'] ?? 'Tu plataforma i
                 <i class="fas fa-chalkboard-teacher"></i> Encontrar un Tutor
             </a>
         </div>
-    </div>
-    <div class="hero-imagen-decorativa">
-        <img src="<?= ASSETS_URL ?>/imagenes/logo.png" alt="Logo Decorativo Tuttor-Up" class="img-fluid-hero">
-    </div>
+    
 </div>
 
 <section class="seccion-destacada-inicio">
-    <h2>¿Qué quieres aprender hoy?</h2>
+    <h1>Navega a traves de nuestro menú lateral , y entérate de lo que tenemos para ofrecerte</h1>
     <div class="acciones-rapidas-inicio">
         <a href="<?= BASE_URL ?>/docentes/filtrarPorMateria/calculo" class="accion-rapida-card">
             <i class="fas fa-calculator"></i>

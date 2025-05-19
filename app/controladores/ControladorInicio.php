@@ -17,6 +17,7 @@ class ControladorInicio {
         $datos_layout['controlador_actual'] = 'ControladorInicio';
         $datos_layout['metodo_actual'] = 'index';
         $datos_layout['datos_vista'] = $datos_vista_especificos; // Pasar los datos específicos de la vista
+        $datos_layout['mostrar_buscador_header'] = true;
 
         $this->cargarLayout(ROOT_PATH . '/app/vistas/inicio/index.php', $datos_layout);
     
